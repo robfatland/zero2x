@@ -4,7 +4,7 @@
 ### Motivation
 
 
-* **Why?** From Data Management Plans to team collaborations: Science advances when data availability is not an obstacle. Too often: It *is* an obstacle. We see a need to publish, pay for and then 'forget about' datasets knowing they will be there for five years. 
+* **Why?** Science advances when data availability is not an obstacle. Too often: It *is* an obstacle. We see a need to publish, pay for and then 'forget about' datasets knowing they will be there for five years. From Data Management Plans to team collaborations there are many incentives and many opportunities to make *small* *specialized* datasets easy to access via RESTful interface queries. 
 * **How?** We create publication patterns built from real *need-driven* use cases. We distill away everything you don't need to know; all you do is follow the pattern, test your access protocol (API), and get on with your research. 
 * **What?** We will prototype this system on the AWS and Google public clouds using simple datasets. We will address a number of sub-topics including data security, API design and composition, registration, complexity, cost, citation and discovery. We will then rinse-and-repeat with more complex datasets until the money runs out.
 
