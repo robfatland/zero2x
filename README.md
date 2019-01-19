@@ -4,9 +4,25 @@
 ### Motivation
 
 
-* **Why?** Science advances when data availability is not an obstacle. Too often: It *is* an obstacle. We see a need to publish, pay for and then 'forget about' datasets knowing they will be there for five years. From Data Management Plans to team collaborations there are many incentives and many opportunities to make *small* *specialized* datasets easy to access via RESTful interface queries. 
-* **How?** We create publication patterns built from real *need-driven* use cases. We distill away everything you don't need to know; all you do is follow the pattern, test your access protocol (API), and get on with your research. 
-* **What?** We will prototype this system on the AWS and Google public clouds using simple datasets. We will address a number of sub-topics including data security, API design and composition, registration, complexity, cost, citation and discovery. We will then rinse-and-repeat with more complex datasets until the money runs out.
+* **Why?** Science advances when data availability is not an obstacle; but too often it *is* an obstacle. We see a need to publish, pay for and then 'forget about' datasets knowing they will be there for five years. We call this **data provisioning**. From Data Management Plans to team collaborations there are many incentives and many opportunities to make *small* *specialized* datasets easy to access via RESTful interface queries with no maintenance. 
+* **How?** We create publication patterns built from real *need-driven* use cases. We distill away everything does not need to know. They follow the pattern, test the resulting access protocol (API), and get on with their research. 
+* **What?** We will prototype this system on the AWS and Google public clouds using simple datasets. We will address a number of sub-topics including documentation, data security, API design and composition, registration, complexity, cost, source citation, discovery and technology obsolescence. We will then rinse-and-repeat with more complicated datasets until the money runs out. 
+
+
+### Is and Is Not
+
+
+This project *is* an integration of technology components -- particularly cloud services like serverless computing -- with some
+basic functional code to establish a baseline for fast self-publication. It is not an attempt to be a comprehensive solution; nor
+is it intended as a data system with many moving parts (e.g. internal calibration and validation). This proposed work is an open source project starting point for further development by the open source community. 
+
+This project is also in a philosophical sense modular or *compositional*.
+By this we mean that once a dataset has been provisioned and given a simple access protocol a second data service 
+can be composed using the first data service as its data source; and so on. As an example consider a high-level task
+of predicting juvenile salmon survival rates. Such a service could be composed / synthesized from precipitation and 
+stream gauge data, turbidity measurements, water temperature records, predator appraisals such as bird counts or 
+sport fishing catch reports. The implication is that data from low to high levels of sophistication are available 
+for use without information technology overhead costs. 
 
 
 ### High Level Narrative
