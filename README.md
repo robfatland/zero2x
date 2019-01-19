@@ -22,22 +22,26 @@ and an account on and familiarity with GitHub.
 
 
 - On GitHub the Researcher clones the Zero2API repository and re-name it to suit the data
-  - Herein are files: *requirements.txt*, *api.py*, *client.ipynb*, *README.md*, *load.sh*
+  - Herein are files: *requirements.txt*, *api.py*, *client.ipynb*, *client.py*, *README.md*, *load.sh*, *table.csv*
   - There are also two launch buttons: For **binder** and **colab**
   - There is some CI machinery...
 
 - *README.md* renders as an instruction manual
-  - *load.sh* is edited to reflect the dataset and run
+  - *load.sh* is edited to reflect the dataset and run with a `load_data` argument
+    - by default this will publish the example *table.csv* data
     - credentials are entered, used and evaporated
     - a service URL is returned
     - the data are now resident on a cloud database service
     - the API is now active but only trivially functional: at the service URL
-  - *api.py* is edited and pushed to the cloud replacing the default API
+  - *api.py* is edited and pushed to the cloud (`push_api` argument) replacing the default API
   - *client.ipynb* is modified and used to test the API
   
 The above process (which is not yet complete) requires about an hour given our assumptions. This does not include the 
-time required to prepare the data as a flat table and to set up the cloud account with credentials. It also does not 
-assign the API service a human-friendly DNS entry. 
+time required to prepare the data as a flat table nor the time to set up the cloud account with credentials. 
+It also does not assign the API service a human-friendly DNS entry. The basic procedure does not require the 
+Researcher to know about the underlying cloud services. These include an API handler ('API Gateway' on AWS,
+'fubar' on Google Cloud Platform), a serverless compute function ('AWS Lambda'/'Google Version') and a 
+relational database service ('RDS', 'Big Query or Something').
 
 
 The next step is to iteratively improve upon the Client/Server relationship by editing and testing both *api.py* 
