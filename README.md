@@ -5,7 +5,7 @@
 
 
 * **Why?** Science advances when data availability is not an obstacle; but too often it *is* an obstacle. We see a need to publish, pay for and then 'forget about' datasets knowing they will be there for five years. We call this **data provisioning**. From Data Management Plans to team collaborations there are many incentives and many opportunities to make *small* *specialized* datasets easy to access via RESTful interface queries with no maintenance. 
-* **How?** We create publication patterns built from real *need-driven* use cases. We distill away everything does not need to know. They follow the pattern, test the resulting access protocol (API), and get on with their research. 
+* **How?** We create publication patterns built from real *need-driven* use cases. We distill away details the publishing Researcher does not need. The Researcher follows the pattern, tests the resulting access protocol (API), and gets on with their research. 
 * **What?** We will prototype this system on the AWS and Google public clouds using simple datasets. We will address a number of sub-topics including documentation, data security, API design and composition, registration, complexity, cost, source citation, discovery and technology obsolescence. We will then rinse-and-repeat with more complicated datasets until the money runs out. 
 
 
