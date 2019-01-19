@@ -1,7 +1,7 @@
 # Zero2API
 ## Zero To API Rapid Data Publication
 
-### Vision Statement
+### Motivation
 
 
 * **Why?** From Data Management Plans to team collaborations: Science advances when data availability is not an obstacle. Too often: It *is* an obstacle. We see a need to publish, pay for and then 'forget about' datasets knowing they will be there for five years. 
