@@ -21,11 +21,11 @@ By this we mean that once a dataset has been provisioned and given a simple acce
 can be composed using the first data service as its data source; and so on. As an example consider a high-level task
 of predicting juvenile salmon survival rates. Such a service could be composed / synthesized from precipitation and 
 stream gauge data, turbidity measurements, water temperature records, predator appraisals such as bird counts or 
-sport fishing catch reports. The implication is that data from low to high levels of sophistication are available 
-for use without information technology overhead costs. 
+sport fishing catch reports, and water chemistry field data; all from disparate sources. The implication of fire-and-forget
+data services is that data are available while overhead costs (particularly time and effort) are largely gone. 
 
 
-### High Level Narrative
+### Narrative
 
 
 Zero To API will bootstrap from practical use cases: Part of the work is a "Gather Use Cases" process. Let's begin 
