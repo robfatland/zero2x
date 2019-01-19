@@ -34,8 +34,12 @@ is based upon real data: GPS tracks of 25 individual baboons over one day in the
 
 
 The Researcher is assumed to have three assets: A dataset on a Linux machine, a cloud account or access to a cloud via brokerage, 
-and an account on and familiarity with GitHub. 
+and an account on and familiarity with GitHub. This person does not need to know about underlying technologies, for example
+communication protocols, serverless computing, database management, HTTP verbs or cloud configuration languages like 
+AWS CloudFormation. 
 
+
+- On the local Linux machine the appropriate cloud API is installed (on AWS the *CLI*; on Google who knows)
 
 - On GitHub the Researcher clones the Zero2API repository and re-name it to suit the data
   - Herein are files: *requirements.txt*, *api.py*, *client.ipynb*, *client.py*, *README.md*, *load.sh*, *table.csv*
@@ -43,30 +47,36 @@ and an account on and familiarity with GitHub.
   - There is some CI machinery...
 
 - *README.md* renders as an instruction manual
-  - *load.sh* is edited to reflect the dataset and run with a `load_data` argument
-    - by default this will publish the example *table.csv* data
-    - credentials are entered, used and evaporated
-    - a service URL is returned
-    - the data are now resident on a cloud database service
-    - the API is now active but only trivially functional: at the service URL
-  - *api.py* is edited and pushed to the cloud (`push_api` argument) replacing the default API
-  - *client.ipynb* is modified and used to test the API
+  - *load.sh* is edited to reflect the dataset. 
+    - It is run once with a 'credentials' argument to establish a safe cloud access path
+    - It is run a second time with a `load_data` argument
+      - by default this will publish the example *table.csv* data
+      - a service URL is returned
+      - the data are now resident on a cloud database service
+      - A simple/trivial API is now active at the service URL
+
+
   
-The above process (which is not yet complete) requires about an hour given our assumptions. This does not include the 
-time required to prepare the data as a flat table nor the time to set up the cloud account with credentials. 
-It also does not assign the API service a human-friendly DNS entry. The basic procedure does not require the 
-Researcher to know about the underlying cloud services. These include an API handler ('API Gateway' on AWS,
-'fubar' on Google Cloud Platform), a serverless compute function ('AWS Lambda'/'Google Version') and a 
-relational database service ('RDS', 'Big Query or Something').
+The above steps are the first half of the process. They require about an hour given our starting assumptions. 
+This does not include the time required to prepare the data as a flat table nor the time to set up the cloud 
+account with credentials. 
+
+The second part of the process involves refining the data access interface or API (Application Programming Interface). 
+
+- *api.py* is edited 
+  - *load.sh* is run with a `push_api` argument to pushed the API code to the cloud
+    - This supersedes the default/prior API code
+- *client.ipynb* and/or *client.py* is modified and used to test the API
+- These steps are iterated as needed
 
 
-The next step is to iteratively improve upon the Client/Server relationship by editing and testing both *api.py* 
-and *client.ipynb*. Once complete the data are available and will incur a monthly cost. Suppose this is $10 per
-month and the objective is to maintain the data service for five years. The total cost is therefore $600 plus
-any added charges for data downloads. Both a pre-pay mechanism and a cost estimate are needed and will be addressed
+Once data provisioning and API development are complete the data service will incur a monthly cost. Suppose this 
+is $10 per month and the objective is to maintain the data service for five years. The total cost of $600 might
+grow depending on data download charges. A cost estimate and a pre-pay mechanism are needed and will be addressed
 in this proposed work. 
 
 
-Note that once the publication of the data is complete the new (originally cloned) repository becomes the reference
-for using the API, i.e. for creating a data service Client. There is no need to create a portal or any other web
-machinery. Once the pre-pay is complete the data will simply be available with no further effort.
+Note that once the publication of the data is complete the Researcher's modified repository -- particularly the 
+*Clien* code -- becomes the reference for the API, i.e. for anyone to create a data service Client. There is no 
+need to create a portal or any other web machinery. Once the pre-pay provisioning is complete the data will simply 
+be available with no further effort.
