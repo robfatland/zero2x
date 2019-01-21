@@ -1,6 +1,32 @@
 # Zero2API
 ## Zero To API Rapid Data Publication
 
+Before UW proposal material let's review a couple key passages from the solicitation, first from NSF: 
+
+> E-CAS will have two phases. The first phase will support six different scientific and engineering applications and workflows with cloud computing allocations and resources for development and code migration. After identifying two final projects selected from the original six, the second phase will commence for another year with a focus on delivering scientific results.
+
+
+Then from Internet-2 bullets
+
+* I2 + AWS + GCP; two phases as 6 Phase I --> 2 Phase II
+* Two categories: Time-to-science and innovation 
+* The project is guided by an external advisory board 
+* Towards a new model of scalable cloud service partnerships to enhance science in a broad spectrum of disciplines. 
+* $81k Total ask for Phase 1 with up to $100k cloud credits additional available
+
+
+And from the lead paragraph some quotes: 
+
+
+> growing academic and research computing and computational science communities
+> illustrate the viability of these services as an option for leading-edge research across a broad scope of science. 
+> simulation and application workflows such as those [on] HPC
+> real-time analytics, artificial intelligence, machine learning, accelerated processing hardware, automation in deployment and scaling, and **management of serverless applications in order to provide digital research platforms to a wider range of science.** 
+> [identify gaps in cloud provider stacks] which in contrast we identify a different sort of gap here...
+
+
+
+
 ### Motivation
 
 
