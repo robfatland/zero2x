@@ -18,7 +18,7 @@ Then from Internet-2 bullets
 And from the lead paragraph some quotes: 
 
 
-> growing academic and research computing and computational science communities
+> growing academic / research computing and computational science communities
 > illustrate the viability of these services as an option for leading-edge research across a broad scope of science. 
 > simulation and application workflows such as those [on] HPC
 > real-time analytics, artificial intelligence, machine learning, accelerated processing hardware, automation in deployment and scaling, and **management of serverless applications in order to provide digital research platforms to a wider range of science.** 
