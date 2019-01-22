@@ -16,7 +16,7 @@ with open(os.path.join(home,'creds.json'), 'a') as cred:
 ```
 
 ## Sample lamdba query
-
+This is a sample lambda function that would serve as an api to query data for a baboon(indiv) between time intervals 'd0' and 'dt'.
 ```
 import json
 from boto3.dynamodb.conditions import Key, Attr
