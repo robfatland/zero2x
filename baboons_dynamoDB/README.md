@@ -15,6 +15,14 @@ with open(os.path.join(home,'creds.json'), 'a') as cred:
     json.dump(creds, cred)
 ```
 
+## Runtime
+
+For the data upload since the default write limit(5) would be low for 1 million rows to be transferred we'll increase
+this number to 1000 in the DynamoDB GUI.
+Since we have a million rows to process we will subset our data files into small chunks(10 for this example) and batch process them to make upload faster.
+
+The run time for this setup is around **15mins**.
+
 ## Sample lamdba query
 This is a sample lambda function that would serve as an api to query data for a baboon(indiv) between time intervals 'd0' and 'dt'.
 
