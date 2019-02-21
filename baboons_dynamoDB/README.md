@@ -1,5 +1,5 @@
 ## Usage
-Before executing the dynmo_upload.py initial setup requires setting up requisite credential file for AWS S3.
+Before executing the dynmo_upload.py initial setup requires setting up requisite credential file for AWS.
 
 Provide one time key_id and key_access to be stored in the home folder as creds.json which will be used by dynmo_upload.py.
 
