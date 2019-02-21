@@ -23,6 +23,33 @@ Since we have a million rows to process we will subset our data files into small
 
 The run time for this setup is around **15mins**.
 
+## Lambda
+AWS Lambda lets you run code without provisioning or managing servers and help building a serverless API.
+lambda provides lightweight serverless way to serve an API. One downside is it doens't come with all python libraries except for the base packages and boto(Aws package). In order to use any other package we have to zip the package alongside our 'lambda_function.py' file for it to work.
+
+In our case we need 'json2html' so we need to zip json2html folder alongside the our 'lambda_function.py' for it to work and uplaod it to lamdba.
+
+Lets build the zip file for our lamdba function.
+
+1) Create a temp folder to install all necessary packages. ```mkdir package```.
+
+2) ```cd package```.
+
+3) Install require packages in the temp folder created. ```pip install json2html --target``` .
+
+4) Zip all the contents together. ```zip -r9 ../function.zip``` .
+
+5) cd ../
+
+6) Zip your custom python script to the already zipped packages. ```zip -g function.zip lambda_function.py```.
+
+7)Upload the zip file ```function.zip``` in the lambda AWS UI.
+
+This is how the UI of lambda would look like:
+![lambda_ui](https://i.imgur.com/9KFK665.png)
+
+This now has the required package json2html as folder which lambda can read from and our main module lambda_function.py
+
 ## Sample lamdba query
 This is a sample lambda function that would serve as an api to query data for a baboon(indiv) between time intervals 'd0' and 'dt'.
 
@@ -35,7 +62,7 @@ Params are:
 
 *Sample API request: {your_api_url}?indiv=1&table=true&t0=0:02:52&t1=0:02:58*
 
-Sample lamdba_function:
+Sample lamdba_function.py:
 ```
 import json
 from boto3.dynamodb.conditions import Key, Attr
