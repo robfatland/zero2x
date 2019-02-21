@@ -4,10 +4,17 @@ This page describes loading a CSV file `baboons.csv` into an AWS DynamoDB RDS in
 procedure can be done from a laptop with Python and particularly `boto3` installed. In short
 
 - configure and clean up a tabular .csv file
+  - you may keep this local
+  - you may stage it to S3 (and record the URL; the file must be public)
 - configure a credentials file
-- load the file to DynamoDB
+- set up a DynamoDB RDS 
+  - This includes a blank table
+  - Configure the read and write speeds to minimize cost
+- load the file to the DynamoDB table using `dynamo_upload.py` as provided here
 - create a lambda function supporting the API
-- associate an API Gateway (AWS service)
+  - ensure that it references the `baboons` table in this accounts DynamoDB
+- associate an API Gateway (AWS service) from the AWS console, preferred method
+  - cli also feasible
 - test
 
 ## Usage
