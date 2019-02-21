@@ -17,6 +17,42 @@ procedure can be done from a laptop with Python and particularly `boto3` install
   - cli also feasible
 - test
 
+# Introduction
+
+This repo is a guide to build a serverless API using AWS lambda. The entire pipeline from data curation to data retrival is built using AWS products like S3 bucket, Dynamodb and lambda.
+![Zero to API](https://i.imgur.com/qiCcCNL.jpg)
+
+# DynamoDB
+
+Amazon DynamoDB is a nonrelational database. Data is read in the form of dictionary.
+DynamoDB involves table creation with two attributes:
+
+    1) Partition Key - For our case it is 'indiv'
+    2) Sort Key - For our case it is 'time' (Optional)
+Sort key is optional but can improve query time if the column is likely to be queried in the API.
+
+DynamoDB only allows query parameters with Partition key and Sort key, which means you cannot query for a
+column which is neither Partition or Sort key.
+
+Ex- Our data has columns ['time','x', 'y', 'indiv'] filtering and subsetting can only be done on our Partition key('indiv')
+and sort key('time') and not on either 'x' or 'y', so a query to fetch all 'x' == 728.2 won't work.
+
+DynamoDB sets read and write limit which are both defaulted to 5 hits. This can be increase or decreased based on API requiremnt.
+
+#### Uploading Data from S3 to Dynamodb
+
+Once done creating a [DynamoDB](https://aws.amazon.com/dynamodb/) table using the GUI on AWS, next step involves reading the csv from S3 bucket to this newly created table.
+
+For the data upload since the default write limit(5) would be low for 1 million rows to be transferred we'll increase this number to 1000 on the DynamoDB GUI ![DaynamoDB](https://i.imgur.com/EzC3t8R.png)
+
+We have created a table called 'baboons' with Partition Key = 'indiv' and Sort Key = 'time
+
+Once done trasnferring write capacity units should be set back to lower values for lesser cost(default =5).
+
+Since we have a million rows to process we will subset out data files into small chunks(10 for this example) and batch process them to make upload faster.
+
+The run time for this would be around 15mins, without multiprocesing it would around 150mins.
+
 ## Usage
 Before executing the dynmo_upload.py initial setup requires setting up requisite credential file for AWS.
 
