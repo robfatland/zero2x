@@ -40,26 +40,36 @@ Sample lamdba_function:
 import json
 from boto3.dynamodb.conditions import Key, Attr
 import boto3
-from pprint import pformat
+#from pprint import pformat
 from json2html import *
+from datetime import date, datetime, time, timedelta
 
-MY_SECRET_ACCESS_KEY = '' 
-MY_ACCESS_KEY_ID = ''
+import os
+SECRET_ACCESS_KEY = os.environ['SKEY']
+ACCESS_KEY_ID = os.environ['AKEY']
 
 def lambda_handler(event, context):
-    dynamodb = boto3.resource('dynamodb', aws_access_key_id=MY_ACCESS_KEY_ID, aws_secret_access_key=MY_SECRET_ACCESS_KEY, region_name='us-east-1')
+    dynamodb = boto3.resource('dynamodb', aws_access_key_id=ACCESS_KEY_ID, aws_secret_access_key=SECRET_ACCESS_KEY, region_name='us-east-1')
     table = dynamodb.Table('baboons')
-    baboon = str(event["queryStringParameters"]['indiv']) # parse api call to get indiv
-    d0 = str(event["queryStringParameters"]['d0']) # parse api call to get start time
-    dt = str(event["queryStringParameters"]['dt']) # parse api call to get end time
-    data_frame_flag = event["queryStringParameters"]['table'].lower() == "true" # parse api call to get table flag
-    # query dynamoDB for the parsed filter parameters and return a response.
-    response = table.query(KeyConditionExpression=Key('indiv').eq(baboon) & Key('time').between(d0, dt))
+    baboon = str(event["queryStringParameters"]['indiv'])
+    t0 = str(event["queryStringParameters"]['t0'])
+    t1 = str(event["queryStringParameters"]['t1'])
+    data_frame_flag = event["queryStringParameters"]['table'].lower() == "true"
 
-    dict_string = pformat(response['Items']) #prettify the dict for asthetics
-    #conditional return a html table based on table flag in the api call.
+    # This was a look into time-zero t0 and delta-time dt but abandoned because data were inconsistent
+    # initial_t0 = time(*map(int, t0.split(":")))
+    # final_t1 = (datetime.combine(date.today(), initial_t0) + timedelta(minutes=int(dt))).time()
+    
+    response = table.query(KeyConditionExpression=Key('indiv').eq(baboon) & Key('time').between(t0, t1))
+
+    for item in response['Items']:
+        item['row'] = float(item['row'])
+
+    # response = table.query(KeyConditionExpression=Key('indiv').eq(baboon) & Key('time').between(d0, final_dt.strftime("%T")))
+
     if not data_frame_flag:
         print("Returning JSON")
+        dict_string = json.dumps(response['Items'], indent=4)
         return { "statusCode": 200, "body": dict_string }
     else:
         print("Returning HTML")
@@ -67,7 +77,8 @@ def lambda_handler(event, context):
             "statusCode": 200, 
             "body": json2html.convert(response['Items']),  
             "headers": {
-        'Content-Type': 'text/html',
+        'Content-Type': 'text/html'
     }}
+
 
 ```
