@@ -30,8 +30,8 @@ Params are:
  
 - indiv=1 (to get baboons with id 1)
 - table=true/false (whether to return a json or html formatted data)
-- d0= start time ( time from which data required)
-- dt= end time (time till which data should be queried)
+- t0= start time ( time from which data required)
+- t1= end time (time till which data should be queried)
 
 *Sample API request: {your_api_url}?indiv=1&table=true&t0=0:02:52&t1=0:02:58*
 
