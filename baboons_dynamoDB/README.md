@@ -27,7 +27,7 @@ The run time for this setup is around **15mins**.
 AWS Lambda lets you run code without provisioning or managing servers and help building a serverless API.
 lambda provides lightweight serverless way to serve an API. One downside is it doens't come with all python libraries except for the base packages and boto(Aws package). In order to use any other package we have to zip the package alongside our 'lambda_function.py' file for it to work.
 
-In our case we need 'json2html' so we need to zip json2html folder alongside the our 'lambda_function.py' for it to work and uplaod it to lamdba.
+In our case we need ```json2html``` so we need to zip ***json2html*** folder alongside the our ```lambda_function.py``` for it to work and uplaod it to lamdba.
 
 Lets build the zip file for our lamdba function.
 
@@ -51,7 +51,7 @@ This is how the UI of lambda would look like:
 This now has the required package json2html as folder which lambda can read from and our main module lambda_function.py
 
 ## Sample lamdba query
-This is a sample lambda function that would serve as an api to query data for a baboon(indiv) between time intervals 'd0' and 'dt'.
+This is a sample lambda function that would serve as an api to query data for a baboon(indiv) between time intervals ```d0``` and ```dt```.
 
 Params are:
  
