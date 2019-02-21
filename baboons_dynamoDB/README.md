@@ -119,6 +119,6 @@ table = False
 t0 = '0:02:52'
 t1 = '0:03:52'
 
-url= '{your_api_url}indiv={}&table={}&t0={}&t1={}'.format(indiv,table,t0,t1)
+url= '[your_api_url]indiv={}&table={}&t0={}&t1={}'.format(indiv,table,t0,t1)
 pd.read_json(url)
 ```
