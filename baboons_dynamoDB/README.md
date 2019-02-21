@@ -1,5 +1,9 @@
 # Introduction
 
+
+This repo is a guide to build a serverless API using AWS lambda. The entire pipeline from data curation to data retrival is built using AWS products like S3 bucket, Dynamodb and lambda.
+![Zero to API](https://i.imgur.com/qiCcCNL.jpg)
+
 This page describes loading a CSV file `baboons.csv` into an AWS DynamoDB RDS instance and providing it with an API. The entire
 procedure can be done from a laptop with Python and particularly `boto3` installed. In short
 
@@ -16,11 +20,6 @@ procedure can be done from a laptop with Python and particularly `boto3` install
 - associate an API Gateway (AWS service) from the AWS console, preferred method
   - cli also feasible
 - test
-
-# Introduction
-
-This repo is a guide to build a serverless API using AWS lambda. The entire pipeline from data curation to data retrival is built using AWS products like S3 bucket, Dynamodb and lambda.
-![Zero to API](https://i.imgur.com/qiCcCNL.jpg)
 
 # DynamoDB
 
