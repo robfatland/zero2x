@@ -38,9 +38,13 @@ and sort key('time') and not on either 'x' or 'y', so a query to fetch all 'x' =
 
 DynamoDB sets read and write limit which are both defaulted to 5 hits. This can be increase or decreased based on API requiremnt.
 
+![Baboons Table](https://imgur.com/kzDXUvq.png)
+
+Then provide appropriate Keys to the table.
+![Table keys](https://imgur.com/dGm5Kvh.png)
 #### Uploading Data from S3 to Dynamodb
 
-Once done creating a [DynamoDB](https://aws.amazon.com/dynamodb/) table using the GUI on AWS, next step involves reading the csv from S3 bucket to this newly created table.
+Once done creating a [DynamoDB](https://aws.amazon.com/dynamodb/) table using the GUI on AWS, next step involves reading the csv from S3 bucket(Public Url) or files present locally to this newly created table.
 
 For the data upload since the default write limit(5) would be low for 1 million rows to be transferred we'll increase this number to 1000 on the DynamoDB GUI ![DaynamoDB](https://i.imgur.com/EzC3t8R.png)
 
