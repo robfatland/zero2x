@@ -33,7 +33,7 @@ Params are:
 - d0= start time ( time from which data required)
 - dt= end time (time till which data should be queried)
 
-*Sample API request: {your_api_url}?indiv=1&table=true&d0=0:02:52&dt=0:02:58*
+*Sample API request: {your_api_url}?indiv=1&table=true&t0=0:02:52&t1=0:02:58*
 
 Sample lamdba_function:
 ```
