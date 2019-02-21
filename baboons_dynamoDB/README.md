@@ -109,3 +109,16 @@ def lambda_handler(event, context):
 
 
 ```
+Or Use API endpoint using python
+
+```
+import pandas as pd
+
+indiv = 1
+table_flag = False
+t0 = '0:02:52'
+t1 = '0:03:52'
+
+url= 'https://g2j0zbptu6.execute-api.us-east-1.amazonaws.com/default/baboon?indiv={}&table={}&t0={}&t1={}'.format(indiv,table_flag,t0,t1)
+pd.read_json(url)
+```
