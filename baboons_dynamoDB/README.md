@@ -116,6 +116,10 @@ Params are:
 
 *Sample API request: {your_api_url}?indiv=1&table=true&t0=0:02:52&t1=0:02:58*
 
+Note: - In your custom lambda function add API Gateway with your required configuration and this would yeild {your_api_url}.
+
+
+
 Sample lamdba_function.py:
 ```
 import json
