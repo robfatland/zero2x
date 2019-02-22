@@ -44,7 +44,9 @@ Following is a screenshot of the UI for DynmoDB
 Then provide appropriate Keys to the table.
 
 ![Table keys](https://imgur.com/dGm5Kvh.png)
-#### Uploading Data from S3 to Dynamodb
+## Uploading Data from S3 to Dynamodb
+
+#### Configuring the read and write speed in the DynamoDB UI.
 
 Once done creating a [DynamoDB](https://aws.amazon.com/dynamodb/) table using the GUI on AWS, next step involves reading the csv from S3 bucket(Public Url) or files present locally to this newly created table.
 
@@ -58,7 +60,7 @@ Since we have a million rows to process we will subset out data files into small
 
 The run time for this would be around 15mins, without multiprocesing it would around 150mins.
 
-## Usage
+#### Uploading data file using python script.
 Before executing the dynmo_upload.py initial setup requires setting up requisite credential file for AWS.
 
 Provide one time key_id and key_access to be stored in the home folder as creds.json which will be used by dynmo_upload.py.
