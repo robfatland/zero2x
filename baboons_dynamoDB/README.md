@@ -36,11 +36,13 @@ column which is neither Partition or Sort key.
 Ex- Our data has columns ['time','x', 'y', 'indiv'] filtering and subsetting can only be done on our Partition key('indiv')
 and sort key('time') and not on either 'x' or 'y', so a query to fetch all 'x' == 728.2 won't work.
 
-DynamoDB sets read and write limit which are both defaulted to 5 hits. This can be increase or decreased based on API requiremnt.
+DynamoDB sets read and write limit which are both defaulted to 5 hits. This can be increase or decreased based on API requirement.
+Following is a screenshot of the UI for DynmoDB
 
 ![Baboons Table](https://imgur.com/kzDXUvq.png)
 
 Then provide appropriate Keys to the table.
+
 ![Table keys](https://imgur.com/dGm5Kvh.png)
 #### Uploading Data from S3 to Dynamodb
 
@@ -72,14 +74,6 @@ creds = {'key_id' : '',
 with open(os.path.join(home,'creds.json'), 'a') as cred:
     json.dump(creds, cred)
 ```
-
-## Runtime
-
-For the data upload since the default write limit(5) would be low for 1 million rows to be transferred we'll increase
-this number to 1000 in the DynamoDB GUI.
-Since we have a million rows to process we will subset our data files into small chunks(10 for this example) and batch process them to make upload faster.
-
-The run time for this setup is around **15mins**.
 
 ## Lambda
 AWS Lambda lets you run code without provisioning or managing servers and help building a serverless API.
