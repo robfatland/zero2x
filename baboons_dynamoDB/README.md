@@ -1,11 +1,27 @@
 # Introduction
 
 
-This repo is a guide to build a serverless API using AWS lambda. The entire pipeline from data curation to data retrival is built using AWS products like S3 bucket, Dynamodb and lambda.
+This README walks you through publishing a dataset and connecting programmatic access 
+(an Application Programming Interface or [API](https://en.wikipedia.org/wiki/Application_programming_interface)) to that data.
+We begin with tabular data -- one million rows, four columns -- in a text file and we proceed on the
+[Amazon public cloud](http://aws.amazon.com). To do likewise you will need an AWS account of your own; and you
+should feel comfortable with logging in to the console and tracking your spend so that you do not exceed your
+budget. 
+
+
+We use a NoSQL database on AWS called DynamoDB.  We will first configure a table within DynamoDB; then 
+load the tabular data into it; and then configure the API using two additional AWS services: Lambda
+serverless compute service and the AWS API Gateway. You may also use AWS S3 object storage to stage
+the tabular data for loading if you like. 
+
+
 ![Zero to API](https://i.imgur.com/qiCcCNL.jpg)
 
-This page describes loading a CSV file `baboons.csv` into an AWS DynamoDB RDS instance and providing it with an API. The entire
-procedure can be done from a laptop with Python and particularly `boto3` installed. In short
+Our example loads a table of baboon positions -- in meters -- as measured by a set individuals located
+at the [Amboseli Baboon Research Project](https://en.wikipedia.org/wiki/Amboseli_Baboon_Research_Project)
+site in Kenya. This procedure can be done from a laptop where Python and the `boto3` package have been
+pre-installed. Here are the procedural steps.
+
 
 - configure and clean up a tabular .csv file
   - you may keep this local
