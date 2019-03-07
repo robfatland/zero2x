@@ -27,21 +27,24 @@ site in Kenya. This procedure can be done from a laptop where Python and the `bo
 pre-installed. `boto3` is a library for talking to the Amazon cloud. Here is the procedure outline.
 
 
-- configure and clean up a tabular .csv file
+- **Your machine** Configure and clean up a tabular .csv file
   - store it on your local computer
   - or stage it to AWS S3 object storage (you will need the URL and the CSV file must be public)
-- configure a credentials file
-- set up a DynamoDB RDS
+- **Your machine** Configure a credentials file
+- **AWS Console** Set up a DynamoDB RDS
   - This includes a blank table
   - Configure the read and write speeds to minimize cost
-- load the file to the DynamoDB table using `dynamo_upload.py` provided here
-- create a lambda function supporting the API
-  - ensure that it references the `baboons` table in this accounts DynamoDB
-- associate an API Gateway (AWS service) from the AWS console, preferred method
-  - cli also feasible
-- test
+- **Your machine** Load the data to this DynamoDB table using `dynamo_upload.py` provided here
+- **Your machine** Prepare the Lambda function code as a zip file
+- **AWS Console** Create a lambda function supporting the API
+  - Import the zip file you created above
+  - Ensure your Lambda function references the DynamoDB table you created above
+- **AWS Console** Associate an API Gateway (AWS service)
+  - This can also be done from your machine using the AWS CLI
+- Test the interface
 
-### Tabular data file
+
+### Prepare your tabular data file
 
 
 ### Configure AWS credentials
