@@ -95,7 +95,7 @@ One may not query other columns but the *scan* operation amounts to the same thi
 on column values) albeit slower. 
 
 
-#### Example from the Amboseli data: indiv, time, x, y
+### Example from the Amboseli data: indiv, time, x, y
 
 Our data has columns ['time','x', 'y', 'indiv'] filtering and subsetting can only be done on our Partition key('indiv')
 and sort key('time') and not on either 'x' or 'y', so a query to fetch all 'x' == 728.2 won't work.
@@ -110,7 +110,7 @@ Then provide appropriate Keys to the table.
 ![Table keys](https://imgur.com/dGm5Kvh.png)
 
 
-## Uploading Data from S3 to Dynamodb
+### Uploading Data from S3 to Dynamodb
 
 #### Configuring the read and write speed in the DynamoDB UI.
 
@@ -129,49 +129,52 @@ The run time for this would be around 15mins, without multiprocesing it would ar
 
 ### Lambda function API
 
-AWS Lambda lets you run code without provisioning or managing servers and help building a serverless API.
-lambda provides lightweight serverless way to serve an API. One downside is it doens't come with all python libraries except for the base packages and boto(Aws package). In order to use any other package we have to zip the package alongside our 'lambda_function.py' file for it to work.
 
-In our case we need ```json2html``` so we need to zip ***json2html*** folder alongside the our ```lambda_function.py``` for it to work and uplaod it to lamdba.
+AWS Lambda functions run code (Python in our case) without provisioning or managing an actual
+computer; or 'server'; or 'Virtual Machine'. The result is a *serverless API*.
+(There really is a computer / server / Virtual Machine involved; we just never see it or think about it.) 
 
-Lets build the zip file for our lamdba function.
 
-1) Create a temp folder to install all necessary packages. ```mkdir package```.
+Lambda functions are lightweight abstractions that simplify getting executable code running as a service.
+They do not typically come with all conceivable Python libraries available; just some commonly used base 
+packages plus `boto3`, the AWS interface package. To use other packages that are not available by default
+we must zip up a computing environment that contains our Python lambda code 'lambda_function.py' together
+with the package libraries we want to use.
 
-2) ```cd package```.
 
-3) Install require packages in the temp folder created. ```pip install json2html --target``` .
+In this case we operate on JSON-format text and so need `json2html`.  We therefore include the `json2html` folder 
+within our working folder together with `lambda_function.py`. The zip file is uploaded to the AWS cloud as a 
+Lambda function bundle. 
 
-4) Zip all the contents together. ```zip -r9 ../function.zip``` .
+Let's build this zip file.
 
-5) cd ../
+- Create a temp folder `package` where we will install everything necessary. 
 
-6) Zip your custom python script to the already zipped packages. ```zip -g function.zip lambda_function.py```.
+```
+$ mkdir package
+$ cd package
+$ pip install json2html --target .
+```
 
-7)Upload the zip file ```function.zip``` in the lambda AWS UI.
+- Zip the contents; then zip your lambda function code together with that 
+
+```
+$ zip -r9 ../function.zip
+$ cd ../
+$ zip -g function.zip lambda_function.py
+```
+
+- Using the AWS Console: Upload `function.zip` to an AWS Lambda function
 
 This is how the UI of lambda would look like:
+
 ![lambda_ui](https://i.imgur.com/9KFK665.png)
 
-This now has the required package json2html as folder which lambda can read from and our main module lambda_function.py
+This has the necessary `json2html` folder which Lambda will read from our main module lambda_function.py
 
-## Sample lamdba query
-This is a sample lambda function that would serve as an api to query data for a baboon(indiv) between time intervals ```d0``` and ```dt```.
-
-Params are:
- 
-- indiv=1 (to get baboons with id 1)
-- table=true/false (whether to return a json or html formatted data)
-- t0= start time ( time from which data required)
-- t1= end time (time till which data should be queried)
-
-*Sample API request: {your_api_url}?indiv=1&table=true&t0=0:02:52&t1=0:02:58*
-
-Note: - In your custom lambda function add API Gateway with your required configuration and this would yeild {your_api_url}.
+### lambda_function.py
 
 
-
-Sample lamdba_function.py:
 ```
 import json
 from boto3.dynamodb.conditions import Key, Attr
@@ -202,6 +205,7 @@ def lambda_handler(event, context):
         item['row'] = float(item['row'])
 
     # response = table.query(KeyConditionExpression=Key('indiv').eq(baboon) & Key('time').between(d0, final_dt.strftime("%T")))
+    # response = table.scan(FilterExpression=Key('indiv').eq(baboon) & Key('x').between(d0, final_dt.strftime("%T")))
 
     if not data_frame_flag:
         print("Returning JSON")
@@ -231,3 +235,19 @@ t1 = '0:03:52'
 url= '[your_api_url]indiv={}&table={}&t0={}&t1={}'.format(indiv,table,t0,t1)
 pd.read_json(url)
 ```
+
+
+#### Test: A sample lamdba query
+
+This is a sample lambda function that would serve as an api to query data for a baboon(indiv) between time intervals ```d0``` and ```dt```.
+
+Params are:
+ 
+- indiv=1 (to get baboons with id 1)
+- table=true/false (whether to return a json or html formatted data)
+- t0= start time ( time from which data required)
+- t1= end time (time till which data should be queried)
+
+*Sample API request: {your_api_url}?indiv=1&table=true&t0=0:02:52&t1=0:02:58*
+
+Note: - In your custom lambda function add API Gateway with your required configuration and this would yeild {your_api_url}.
