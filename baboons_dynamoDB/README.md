@@ -1,4 +1,8 @@
-# Introduction
+# Publishing a data table to the cloud
+
+## With supporting API
+
+### Introduction
 
 
 This README walks you through publishing a dataset and connecting programmatic access 
@@ -20,36 +24,80 @@ the tabular data for loading if you like.
 Our example loads a table of baboon positions -- in meters -- as measured by a set individuals located
 at the [Amboseli Baboon Research Project](https://en.wikipedia.org/wiki/Amboseli_Baboon_Research_Project)
 site in Kenya. This procedure can be done from a laptop where Python and the `boto3` package have been
-pre-installed. Here are the procedural steps.
+pre-installed. `boto3` is a library for talking to the Amazon cloud. Here is the procedure outline.
 
 
 - configure and clean up a tabular .csv file
-  - you may keep this local
-  - you may stage it to S3 (and record the URL; the file must be public)
+  - store it on your local computer
+  - or stage it to AWS S3 object storage (you will need the URL and the CSV file must be public)
 - configure a credentials file
-- set up a DynamoDB RDS 
+- set up a DynamoDB RDS
   - This includes a blank table
   - Configure the read and write speeds to minimize cost
-- load the file to the DynamoDB table using `dynamo_upload.py` as provided here
+- load the file to the DynamoDB table using `dynamo_upload.py` provided here
 - create a lambda function supporting the API
   - ensure that it references the `baboons` table in this accounts DynamoDB
 - associate an API Gateway (AWS service) from the AWS console, preferred method
   - cli also feasible
 - test
 
-# DynamoDB
+### Tabular data file
 
-Amazon DynamoDB is a nonrelational database. Data is read in the form of dictionary.
-DynamoDB involves table creation with two attributes:
 
-    1) Partition Key - For our case it is 'indiv'
-    2) Sort Key - For our case it is 'time' (Optional)
-Sort key is optional but can improve query time if the column is likely to be queried in the API.
+### Configure AWS credentials
 
-DynamoDB only allows query parameters with Partition key and Sort key, which means you cannot query for a
-column which is neither Partition or Sort key.
+Before uploading your tabular data file (by executing the `dynmo_upload.py` script provided here)
+you will need to create an AWS credentials file. The file looks like this: 
 
-Ex- Our data has columns ['time','x', 'y', 'indiv'] filtering and subsetting can only be done on our Partition key('indiv')
+
+```{"key_id": "ABCDEFGHIJKLMNOPQRST", "key_access": "+4silQghzOLlflsUJ7PRdldx5QQ60kdakRslkgjF"}```
+
+
+You can simply copy/paste this template and replace the two values with the correct values for a working
+access key. You generate a key at the AWS Console under the `IAM` service, associated with your IAM User account.
+Once you have the key you can also using the following Python script to generate a properly formatted 
+credential file. You will need to insert the `id` and `access` strings in this script; then run it once; 
+and then delete the script. The credentials will be stored in your home folder as `creds.json`. 
+
+
+> ***IMPORTANT: Do not store your credentials or your credential-generator script in a GitHub repository.
+If you do so you are subject to account abuse by malicious bots that scan GitHub across versions for usable
+keys. Failing to follow this guideline can be disastrous.***
+
+```
+import os
+from os.path import expanduser
+
+home = expanduser("~")
+# store one time credentials in the home directory
+creds = {'key_id' : '',
+         'key_access' : ''}
+with open(os.path.join(home,'creds.json'), 'a') as cred:
+    json.dump(creds, cred)
+```
+
+### Create a DynamoDB table
+
+Amazon DynamoDB is a non-relational database. Data is read as a dictionary.
+DynamoDB works with tables that have two attributes:
+
+
+    1) A Partition Key - For this case we use the 'indiv' column
+    2) A Sort Key - Here we use 'time' (this is optional)
+        
+The Partition Key gives us a first data subdivision that maps to strict equality in queries.
+The Sort Key gives us a second queryable attribute; and here we can query by range / inequality.
+The sort key is optional but can improve query time if the column is likely to be queried by the Researcher. 
+
+
+DynamoDB only allows queries against Partition and Sort keys, i.e. columns in your data table. 
+One may not query other columns but the *scan* operation amounts to the same thing (search based
+on column values) albeit slower. 
+
+
+#### Example from the Amboseli data: indiv, time, x, y
+
+Our data has columns ['time','x', 'y', 'indiv'] filtering and subsetting can only be done on our Partition key('indiv')
 and sort key('time') and not on either 'x' or 'y', so a query to fetch all 'x' == 728.2 won't work.
 
 DynamoDB sets read and write limit which are both defaulted to 5 hits. This can be increase or decreased based on API requirement.
@@ -60,6 +108,8 @@ Following is a screenshot of the UI for DynmoDB
 Then provide appropriate Keys to the table.
 
 ![Table keys](https://imgur.com/dGm5Kvh.png)
+
+
 ## Uploading Data from S3 to Dynamodb
 
 #### Configuring the read and write speed in the DynamoDB UI.
@@ -76,24 +126,9 @@ Since we have a million rows to process we will subset out data files into small
 
 The run time for this would be around 15mins, without multiprocesing it would around 150mins.
 
-#### Uploading data file using python script.
-Before executing the dynmo_upload.py initial setup requires setting up requisite credential file for AWS.
 
-Provide one time key_id and key_access to be stored in the home folder as creds.json which will be used by dynmo_upload.py.
+### Lambda function API
 
-```
-import os
-from os.path import expanduser
-
-home = expanduser("~")
-# store one time credentials in the home directory
-creds = {'key_id' : '',
-         'key_access' : ''}
-with open(os.path.join(home,'creds.json'), 'a') as cred:
-    json.dump(creds, cred)
-```
-
-## Lambda
 AWS Lambda lets you run code without provisioning or managing servers and help building a serverless API.
 lambda provides lightweight serverless way to serve an API. One downside is it doens't come with all python libraries except for the base packages and boto(Aws package). In order to use any other package we have to zip the package alongside our 'lambda_function.py' file for it to work.
 
