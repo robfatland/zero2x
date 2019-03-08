@@ -31,6 +31,8 @@ pre-installed. `boto3` is a library for talking to the Amazon cloud. Here is the
   - store it on your local computer
   - or stage it to AWS S3 object storage (you will need the URL and the CSV file must be public)
 - **Your machine** Configure a credentials file
+- **Your machine** Ensure Python and necessary packages are installed
+  - Particularly { boto3, numpy, pandas, tqdm } and any dependencies
 - **AWS Console** Set up a DynamoDB RDS
   - This includes a blank table
   - Configure the read and write speeds to minimize cost
@@ -78,6 +80,42 @@ creds = {'key_id' : '',
 with open(os.path.join(home,'creds.json'), 'a') as cred:
     json.dump(creds, cred)
 ```
+
+
+### Ensure Python and necessary packages are installed
+
+You can for example proceed on a Windows laptop where `bash` is installed; or on a Linux 
+machine where `bash` is the default shell program (operating system interface language).
+
+
+- `$ wget https://repo.continuum.io/miniconda/Minconda3-latest-Linux-x86_64.sh`
+- `$ bash Minconda3-latest-Linux-x86_64.sh` + agreeable responses to prompts
+- `$ source ~/.bashrc` to activate the `conda` command
+- `$ conda install numpy` and so on for pandas, tqdm, boto3; again being agreeable
+- `$ pip freeze` to list installed packages
+- `$ pip freeze > requirements.txt` to create an environment file
+
+You are not required to generate the `requirements.txt` file. We mention this in passing as
+a useful technique for automation tasks that will come up in related work. 
+
+
+With the above steps completed: Create a file `go.py` consisting of this text:
+
+```
+import boto3
+import numpy as np
+import pandas as pd
+import tqdm
+
+print('words words words...')
+```
+
+This should run properly without errors when you type in
+
+```
+$ python go.py
+```
+
 
 ### Create a DynamoDB table
 
