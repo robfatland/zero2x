@@ -34,16 +34,15 @@ pre-installed. `boto3` is a library for talking to the Amazon cloud. Here is the
 - **Your machine** Ensure Python and necessary packages are installed
   - Particularly { boto3, numpy, pandas, tqdm } and any dependencies
 - **AWS Console** Set up a DynamoDB RDS
-  - This includes a blank table
-  - Configure the read and write speeds to minimize cost
+  - Create an empty table and configure write speed for loading
 - **Your machine** Load the data to this DynamoDB table using `dynamo_upload.py` provided here
-- **Your machine** Prepare the Lambda function code as a zip file
-- **AWS Console** Create a lambda function supporting the API
-  - Import the zip file you created above
-  - Ensure your Lambda function references the DynamoDB table you created above
-- **AWS Console** Associate an API Gateway (AWS service)
+- **AWS Console** Verify the data loaded into DynamoDB and reset the write speed for cost management
+- **Your machine** Prepare Lambda function code as a zip file
+- **AWS Console** Create the Lambda API powered by the zip file from the previous step
+  - This Lambda function will access the DynamoDB table created above
+- **AWS Console** Associate an API Gateway with this lambda function
   - This can also be done from your machine using the AWS CLI
-- Test the interface
+- **Your machine** Test the interface
 
 
 ### Prepare your tabular data file
