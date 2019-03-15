@@ -1,7 +1,16 @@
 # Zero2API
+
+This repo considers fast (time scale = hours) publication of tabular data with an active API for data retrieval
+[.](https://github.com/robfatland/ops)
+
+
+- Some notes here seem to apply to a proposal and are out of date
+- Somewhere in GoogleDocVille is a draft of a paper that should get factored in here
+
+
 ## Zero To API Rapid Data Publication
 
-Before UW proposal material let's review a couple key passages from the solicitation, first from NSF: 
+From the solicitation, first from NSF: 
 
 > E-CAS will have two phases. The first phase will support six different scientific and engineering applications and workflows with cloud computing allocations and resources for development and code migration. After identifying two final projects selected from the original six, the second phase will commence for another year with a focus on delivering scientific results.
 
