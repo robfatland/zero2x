@@ -7,6 +7,24 @@ This repo considers fast (time scale = hours) publication of tabular data with a
 - Some notes here seem to apply to a proposal and are out of date
 - Somewhere in GoogleDocVille is a draft of a paper that should get factored in here
 
+## Client example code
+
+```
+# baboon API demo
+
+import pandas as pd
+
+indiv = 10
+table_flag = False
+t0 = "0:02:52"
+t1 = "0:03:52"
+
+endpoint = "https://g2j0zbptu6.execute-api.us-east-1.amazonaws.com/default/baboon"
+
+url = endpoint + "?indiv={}&table={}&t0={}&t1={}".format(indiv, table_flag, t0, t1)
+
+pd.read_json(url)
+```
 
 ## Zero To API Rapid Data Publication
 
