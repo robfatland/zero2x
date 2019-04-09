@@ -142,6 +142,20 @@ $ python go.py
 
 ### Create a DynamoDB table
 
+Log on to the AWS Console and be sure to set your working **Region** as desired.
+Go to the DynamoDB service and click **Create table**. 
+Name the table something appropriate (`baboons`). Set the Partition Key 
+to be the string `indiv` and add a Sort Key `time`. 
+Un-check *Use default settings*. 
+Under *Auto Scaling* un-check *Write capacity*.
+Directly above this set *Write capacity units* to 1000. 
+Click on *Create* at the bottom of the page. 
+The table should build fairly quickly, within a minute or so.
+
+
+#### Context on the DynamoDB table
+
+
 DynamoDB data are read from a table as a dictionary.
 DynamoDB tables have two attributes:
 
@@ -178,10 +192,29 @@ increase the write limit to speed up the writing process.
 
 Once the table is **Created**...
 
-- We proceed to upload data to it
+- We proceed to upload data to it (next step, below)
   - This is done using a parallel batch approach to speed up the process
 - We then set the write limit back to 5 to save money
 
 ### Upload data to the DynamoDB table
 
-Modify the 
+- Modify the `DynamoDB_upload.py` file found in this repo as follows:
+  - In the `dynamodb_upload` function find: `col_to_string = ['x', 'y', 'indiv']`
+    - `col_to_string` is a Python list of three of the four column headers from the CSV file
+      - These column headers are in this list for a reason:
+        - `pandas` loads the CSV file into memory in __main__
+        - `pandas` infers that the x, y and indiv columns contain numerical data in this process
+          - specifically types `float`, `float`, and `int` respectively for x, y and indiv
+        - DynamoDB accepts type `string` data
+        - Therefore `col_to_string` is used to convert values in these columns to type `string`
+      - Modify this line of code to operate correctly on the CSV file being uploaded
+  - Ensure `region_name` matches the DynamoDB region selected above
+  - Ensure `table = resource.Table('tablename') matches the table name selected above
+  - Based on experience you may wish to modify `num_process = 10` to some other value
+- Run the Python script
+
+```
+python DynamoDB_upload.py
+```
+
+
