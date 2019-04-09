@@ -2,16 +2,20 @@
 
 ## Overview
 
-This repo considers fast (time scale = hours) publication of tabular data with an active API for data retrieval
-[.](https://github.com/robfatland/ops)
+This repo considers fast (time scale ~ one hour) publication of tabular data together with an active API 
+for data query/retrieval[.](https://github.com/robfatland/ops)
 
 
-- In advance: Secure and configure an AWS cloud account
-- Clean up a `.csv` tabular data file you would like to make available
-- Push the data into an AWS DynamoDB table
-- Build an API service using an AWS Lambda function and API Gateway service
-- Stabilize the API access URL using an AWS Elastic IP address
-- Write and test an API `client`
+### Quick procedural summary
+
+- publish the table
+  - Secure and configure a cloud account (working example uses AWS)
+  - Organize a `.csv` tabular data file to publish
+  - Push the data into a cloud database-as-a-service (AWS DynamoDB table)
+- build an application programming interface (API)
+  - Associate a serverless API service (AWS Lambda with API Gateway)
+  - Attach a stable URL to this service (AWS Elastic IP)
+- write and test a `client` of the service
 
 
 ## Client example code
