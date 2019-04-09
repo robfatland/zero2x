@@ -57,6 +57,11 @@ particularly cloud services like serverless computing -- with some Python code t
 This is not a comprehensive solution however. The data capacity is limited and there is very little anticipation of 
 *large robust data system* behavior.
 
+*It might be tempting to try and build a lot of customization
+into the access API. Suggestion: Make the access API as simple as possible. 
+This avoids anticipating future use (may be inaccurate) without prohibiting subsequent composition...*
+
+
 A second aspect of this project is *composition*: Once a dataset is emplaced we are free to write a second data 
 service (and third, fourth, ...) built upon the first and potentially on other resources. As an example consider a 
 high-level task of predicting juvenile salmon survival rates. Such a service could be composed / synthesized from 
@@ -69,10 +74,11 @@ bird counts or sport fishing catch reports, and water chemistry field data. Thes
 
 This needs a lot of updating...
 
-We begin with a tabular dataset of 1048575 rows and five columns: **row** **ID**, **x**, **y**, and **timestamp**. This
-is based upon real data: GPS fixes every two seconds for 25 individual baboons spanning one day. This was recorded in 
-the Amboseli ecosystem in Kenya, East Africa. The latitudes and longitudes are converted to meters of north/east with 
-respect to an arbitrary local origin. Proceeding on AWS:
+We begin with a tabular dataset (CSV file)
+[(back-story link)](https://en.wikipedia.org/wiki/Amboseli_Baboon_Research_Project)
+of 1048576 rows and four columns including a header **`indiv, time, x, y`**. Each row is a GPS
+fix in meters relative to an arbitrary reference. These were recordead every two seconds for 25 
+individual baboons over the course of a day. Proceeding on AWS:
 
 - Set up an AWS account; we will be using DynamoDB so that must be enabled
 - On a local machine AWS API is installed (called the AWS *CLI* for Command Line Interface)
