@@ -5,23 +5,45 @@
 ### Introduction
 
 
-This README walks you through publishing a dataset and connecting programmatic access 
+This publish_table README walks you through publishing a tabular dataset. 
+
+flag
+and connecting programmatic access 
 (an Application Programming Interface or [API](https://en.wikipedia.org/wiki/Application_programming_interface)) to that data.
-We begin with tabular data -- one million rows, four columns -- in a text file and we proceed on the
-[Amazon public cloud](http://aws.amazon.com). To do likewise you will need an AWS account of your own; and you
-should feel comfortable with logging in to the console and tracking your spend so that you do not exceed your
+
+Provided is a tabular dataset as a CSV file: 1048576 rows including one header row and four columns.
+
+flag
+in a text file and we proceed on the
+[Amazon public cloud](http://aws.amazon.com). 
+
+You will need an AWS account where you feel comfortable logging in, managing and monitoring your spend, and following
+appropriate security guidelines concerning IAM Users and access keys. 
+
+flag
+warning ref needed 
+to the console and tracking your spend so that you do not exceed your
 budget. 
 
 
-We use a NoSQL database on AWS called DynamoDB.  We will first configure a table within DynamoDB; then 
-load the tabular data into it; and then configure the API using two additional AWS services: Lambda
+Here we use a NoSQL database service on AWS called DynamoDB.  
+
+- configure a table within DynamoDB
+- load the tabular data
+- record the resource address
+
+flag 
+and then configure the API using two additional AWS services: Lambda
 serverless compute service and the AWS API Gateway. You may also use AWS S3 object storage to stage
 the tabular data for loading if you like. 
 
-
+flag
 ![Zero to API](https://i.imgur.com/qiCcCNL.jpg)
 
-Our example loads a table of baboon positions -- in meters -- as measured by a set individuals located
+
+flag left off here decomposition phase
+
+Our example data is as noted a CSV table of baboon positions -- in meters -- as measured by a set individuals located
 at the [Amboseli Baboon Research Project](https://en.wikipedia.org/wiki/Amboseli_Baboon_Research_Project)
 site in Kenya. This procedure can be done from a laptop where Python and the `boto3` package have been
 pre-installed. `boto3` is a library for talking to the Amazon cloud. Here is the procedure outline.
