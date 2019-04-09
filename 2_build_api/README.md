@@ -1,10 +1,27 @@
-# Build the API 
+# 2_build_api 
 
-*Sample API request: {your_api_url}?indiv=1&table=true&t0=0:02:52&t1=0:02:58*
+## Introduction
+
+Upon completing this step you will be able to retrieve data from your DynamoDB-stored table either directly 
+using a URL (say in your browser) or programmatically (say from a Python client). An example request will look
+like this: 
+
+```
+{your_api_url}?indiv=10&table=true&t0=0:20:00&t1=0:30:00
+```
+
+This will retrieve ten minutes of position fixes for one individual in table (rather than JSON) format.
+Since the fixes occur once every two seconds this will be about 300 values.
+
+
+flag left off here
+
 
 Note: - In your custom lambda function add API Gateway with your required configuration and this would yeild {your_api_url}.
+
 ### Lambda function API
 
+flag
 
 AWS Lambda functions run code (Python in our case) without provisioning or managing an actual
 computer; or 'server'; or 'Virtual Machine'. The result is a *serverless API*.
@@ -21,6 +38,7 @@ with the package libraries we want to use.
 In this case we operate on JSON-format text and so need `json2html`.  We therefore include the `json2html` folder 
 within our working folder together with `lambda_function.py`. The zip file is uploaded to the AWS cloud as a 
 Lambda function bundle. 
+
 
 Let's build this zip file.
 
