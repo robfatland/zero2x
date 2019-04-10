@@ -40,19 +40,19 @@ within our working folder together with `lambda_function.py`. The zip file is up
 Lambda function bundle. 
 
 
-Let's build this zip file.
+Let's build this zip file. Our Python will depend upon the json2html package.
+Instructions: On installing 
+[AWS lambda by deployment package with dependencies](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html#python-package-dependencies).
 
-- Create a temp folder `package` where we will install everything necessary. 
+- Create a master folder called `myfunction`
+- Create a sub-folder `package` where the dependencies reside
 
 ```
+$ mkdir myfunction
+$ cd myfunction
 $ mkdir package
 $ cd package
 $ pip install json2html --target .
-```
-
-- Zip the contents; then zip your lambda function code together with that 
-
-```
 $ zip -r9 ../function.zip
 $ cd ../
 $ zip -g function.zip lambda_function.py
