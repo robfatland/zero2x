@@ -20,7 +20,7 @@ flag refine this
 In your custom lambda function add API Gateway with your required configuration and this would yeild {your_api_url}.
 
 
-### Lambda function API
+## Lambda function API
 
 flag
 
@@ -57,6 +57,7 @@ $ zip -g function.zip lambda_function.py
 The first `zip` command creates a zip file `function.zip`. The second `zip` command adds the lambda function 
 code to this zip file. 
 
+
 - Log in to the AWS console 
   - Create a role named (say) `zero2api` with two attached policies
     - AmazonAPIGatewayInvokeFullAccess
@@ -66,16 +67,32 @@ code to this zip file.
     - Assign the Lambda the `zero2api` role
     - Upload `function.zip` as the code base
       - This is un-packed and shown in the Function Code section of the Lambda configuration page
+    - Add environment variables AKEY and SKEY with values taken from an AWS access key
+      - AKEY is the Access Key
+      - SKEY is the Secret Key
     - In the Designer add an API Gateway (left side) as a trigger for this Lambda function
-      
+      - Click on this to configure it
+        - Create a new API
+        - Open Security
+        - Deployment stage: Default
+        - Click 'Add' at the lower right
+      - Once configured note the API Gateway endpoint information
+        - API, endpoint URL and name: All listed in the Lambda      
+
+
+flag we should be able to do this with just roles, not access keys...
+
 
 This is how the Lambda Function Code section appears:
 
+
 ![lambda_ui](https://i.imgur.com/9KFK665.png)
+
 
 This has the necessary `json2html` folder which Lambda will read from our main module lambda_function.py
 
-#### Template for `lambda_function.py`
+
+### Template for `lambda_function.py`
 
 
 ```
@@ -120,7 +137,7 @@ def lambda_handler(event, context):
         }
 ```
 
-#### Sample Client code
+### Sample Client code
 
 ```
 import pandas as pd
@@ -135,7 +152,7 @@ pd.read_json(url)
 ```
 
 
-#### Test: A sample lamdba query
+### Test: A sample lamdba query
 
 This is a sample Lambda function that would serve as an api to query data for a baboon(indiv) between 
 times intervals ```t0``` and ```t1```.
