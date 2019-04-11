@@ -104,11 +104,9 @@ from datetime import date, datetime, time, timedelta
 ACCESS_KEY_ID, SECRET_ACCESS_KEY = os.environ['AKEY'], os.environ['SKEY']
 
 def lambda_handler(event, context):
-    dynamodb = boto3.resource('dynamodb', \
-               aws_access_key_id=ACCESS_KEY_ID, \
-               aws_secret_access_key=SECRET_ACCESS_KEY, \
-               region_name='us-east-1')
-    table    = dynamodb.Table('baboons')
+    dynamodb = boto3.resource('dynamodb', aws_access_key_id=ACCESS_KEY_ID, 
+                 aws_secret_access_key=SECRET_ACCESS_KEY, region_name='us-west-2')
+    table    = dynamodb.Table('baboons1')
     baboon   = str(event["queryStringParameters"]['indiv'])
     t0       = str(event["queryStringParameters"]['t0'])
     t1       = str(event["queryStringParameters"]['t1'])
