@@ -96,15 +96,12 @@ This has the necessary `json2html` folder which Lambda will read from our main m
 
 
 ```
-import json
+import json, boto3, os
 from boto3.dynamodb.conditions import Key, Attr
-import boto3
 from json2html import *
 from datetime import date, datetime, time, timedelta
 
-import os
-SECRET_ACCESS_KEY = os.environ['SKEY']
-ACCESS_KEY_ID = os.environ['AKEY']
+ACCESS_KEY_ID, SECRET_ACCESS_KEY = os.environ['AKEY'], os.environ['SKEY']
 
 def lambda_handler(event, context):
     dynamodb = boto3.resource('dynamodb', \
@@ -116,13 +113,8 @@ def lambda_handler(event, context):
     t0       = str(event["queryStringParameters"]['t0'])
     t1       = str(event["queryStringParameters"]['t1'])
     dfflag   = event["queryStringParameters"]['table'].lower() == "true"
-    
     response = table.query(KeyConditionExpression=Key('indiv').eq(baboon) & Key('time').between(t0, t1))
-
     for item in response['Items']: item['row'] = float(item['row'])
-
-    # response = table.query(KeyConditionExpression=Key('indiv').eq(baboon) & Key('time').between(d0, final_dt.strftime("%T")))
-    # response = table.scan(FilterExpression=Key('indiv').eq(baboon) & Key('x').between(d0, final_dt.strftime("%T")))
 
     if not dfflag:
         print("Returning JSON")
@@ -136,6 +128,17 @@ def lambda_handler(event, context):
             "headers": {'Content-Type': 'text/html'}
         }
 ```
+
+### Note on query versus scan
+
+Basic code templates:
+
+```
+    # two query types: query and scan; here are format notes: 
+    #   response = table.query(KeyConditionExpression=Key('indiv').eq(baboon) & Key('time').between(d0, final_dt.strftime("%T")))
+    #   response = table.scan(FilterExpression=Key('indiv').eq(baboon) & Key('x').between(d0, final_dt.strftime("%T")))
+```
+
 
 ### Sample Client code
 
