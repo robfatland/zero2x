@@ -112,7 +112,6 @@ def lambda_handler(event, context):
     t1       = str(event["queryStringParameters"]['t1'])
     dfflag   = event["queryStringParameters"]['table'].lower() == "true"
     response = table.query(KeyConditionExpression=Key('indiv').eq(baboon) & Key('time').between(t0, t1))
-    for item in response['Items']: item['row'] = float(item['row'])
 
     if not dfflag:
         print("Returning JSON")
@@ -126,6 +125,16 @@ def lambda_handler(event, context):
             "headers": {'Content-Type': 'text/html'}
         }
 ```
+
+### Note on sketchy line of code
+
+Found below `response =` and obviously it is a type cast; but we don't know what it is doing and 
+its presence broke the API.
+
+```
+    for item in response['Items']: item['row'] = float(item['row'])
+```
+
 
 ### Note on query versus scan
 
