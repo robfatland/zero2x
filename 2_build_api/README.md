@@ -2,78 +2,86 @@
 
 ## Introduction
 
-Upon completing this step you will be able to retrieve data from your DynamoDB-stored table either directly 
-using a URL (say in your browser) or programmatically (say from a Python client). An example request will look
+This step creates URL-based query access to the data table published in part 1. This access can be done 
+using a URL (say in your browser) or programmatically from a Python client. An example query will look
 like this: 
 
 ```
 {your_api_url}?indiv=10&table=true&t0=0:20:00&t1=0:30:00
 ```
 
-This will retrieve ten minutes of position fixes for one individual in table (rather than JSON) format.
+This will retrieve ten minutes of position fixes for one individual in table format (not JSON).
 Since the fixes occur once every two seconds this will be about 300 values.
 
 
-flag left off here
+flag refine this
 
 
-Note: - In your custom lambda function add API Gateway with your required configuration and this would yeild {your_api_url}.
+In your custom lambda function add API Gateway with your required configuration and this would yeild {your_api_url}.
+
 
 ### Lambda function API
 
 flag
 
 AWS Lambda functions run code (Python in our case) without provisioning or managing an actual
-computer; or 'server'; or 'Virtual Machine'. The result is a *serverless API*.
-(There really is a computer / server / Virtual Machine involved; we just never see it or think about it.) 
+computer (Virtual Machine). There *is* a computer involved but we never see this.
 
 
-Lambda functions are lightweight abstractions that simplify getting executable code running as a service.
-They do not typically come with all conceivable Python libraries available; just some commonly used base 
-packages plus `boto3`, the AWS interface package. To use other packages that are not available by default
-we must zip up a computing environment that contains our Python lambda code 'lambda_function.py' together
-with the package libraries we want to use.
+Python often uses packages that are custom-installed locally. On AWS Lambda the Python environment
+has some basic packages available; but not all possible Python libraries are pre-installed. (The `boto3` 
+package *is* preinstalled to provide Python access to AWS.) To use other packages that are not available 
+by default we zip up a computing environment containing both our Python Lambda code (the file is called
+`lambda_function.py` together with package libraries we want to use.
 
 
-In this case we operate on JSON-format text and so need `json2html`.  We therefore include the `json2html` folder 
-within our working folder together with `lambda_function.py`. The zip file is uploaded to the AWS cloud as a 
-Lambda function bundle. 
+In our Zero2API case we operate on JSON-format text and so need the `json2html` package.  
+We build a zip file using two `zip` commands. The first zips the package folder recursively and
+the second adds the API code in `lambda_function.py`. See 
+[this link](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html#python-package-dependencies)
+for more on Python deployment packages for AWS Lambda.
 
-
-Let's build this zip file. Our Python will depend upon the json2html package.
-Instructions: On installing 
-[AWS lambda by deployment package with dependencies](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html#python-package-dependencies).
-
-- Create a master folder called `myfunction`
-- Create a sub-folder `package` where the dependencies reside
+- Create the `lambda_function.py` file in some directory on a Linux system
+  - See template file given below
+- From this same location (being sure to include the periods) issue:
 
 ```
-$ mkdir myfunction
-$ cd myfunction
 $ mkdir package
 $ cd package
 $ pip install json2html --target .
-$ zip -r9 ../function.zip
+$ zip -r9 ../function.zip .
 $ cd ../
 $ zip -g function.zip lambda_function.py
 ```
 
-- Using the AWS Console: Upload `function.zip` to an AWS Lambda function
+The first `zip` command creates a zip file `function.zip`. The second `zip` command adds the lambda function 
+code to this zip file. 
 
-This is how the UI of lambda would look like:
+- Log in to the AWS console 
+  - Create a role named (say) `zero2api` with two attached policies
+    - AmazonAPIGatewayInvokeFullAccess
+    - AmazonDynamoDBReadOnlyAccess
+  - Also on the console: Create a Lambda function
+    - Specify Python 3.7 
+    - Assign the Lambda the `zero2api` role
+    - Upload `function.zip` as the code base
+      - This is un-packed and shown in the Function Code section of the Lambda configuration page
+    - In the Designer add an API Gateway (left side) as a trigger for this Lambda function
+      
+
+This is how the Lambda Function Code section appears:
 
 ![lambda_ui](https://i.imgur.com/9KFK665.png)
 
 This has the necessary `json2html` folder which Lambda will read from our main module lambda_function.py
 
-### lambda_function.py
+#### Template for `lambda_function.py`
 
 
 ```
 import json
 from boto3.dynamodb.conditions import Key, Attr
 import boto3
-#from pprint import pformat
 from json2html import *
 from datetime import date, datetime, time, timedelta
 
@@ -82,26 +90,24 @@ SECRET_ACCESS_KEY = os.environ['SKEY']
 ACCESS_KEY_ID = os.environ['AKEY']
 
 def lambda_handler(event, context):
-    dynamodb = boto3.resource('dynamodb', aws_access_key_id=ACCESS_KEY_ID, aws_secret_access_key=SECRET_ACCESS_KEY, region_name='us-east-1')
-    table = dynamodb.Table('baboons')
-    baboon = str(event["queryStringParameters"]['indiv'])
-    t0 = str(event["queryStringParameters"]['t0'])
-    t1 = str(event["queryStringParameters"]['t1'])
-    data_frame_flag = event["queryStringParameters"]['table'].lower() == "true"
-
-    # This was a look into time-zero t0 and delta-time dt but abandoned because data were inconsistent
-    # initial_t0 = time(*map(int, t0.split(":")))
-    # final_t1 = (datetime.combine(date.today(), initial_t0) + timedelta(minutes=int(dt))).time()
+    dynamodb = boto3.resource('dynamodb', \
+               aws_access_key_id=ACCESS_KEY_ID, \
+               aws_secret_access_key=SECRET_ACCESS_KEY, \
+               region_name='us-east-1')
+    table    = dynamodb.Table('baboons')
+    baboon   = str(event["queryStringParameters"]['indiv'])
+    t0       = str(event["queryStringParameters"]['t0'])
+    t1       = str(event["queryStringParameters"]['t1'])
+    dfflag   = event["queryStringParameters"]['table'].lower() == "true"
     
     response = table.query(KeyConditionExpression=Key('indiv').eq(baboon) & Key('time').between(t0, t1))
 
-    for item in response['Items']:
-        item['row'] = float(item['row'])
+    for item in response['Items']: item['row'] = float(item['row'])
 
     # response = table.query(KeyConditionExpression=Key('indiv').eq(baboon) & Key('time').between(d0, final_dt.strftime("%T")))
     # response = table.scan(FilterExpression=Key('indiv').eq(baboon) & Key('x').between(d0, final_dt.strftime("%T")))
 
-    if not data_frame_flag:
+    if not dfflag:
         print("Returning JSON")
         dict_string = json.dumps(response['Items'], indent=4)
         return { "statusCode": 200, "body": dict_string }
@@ -110,13 +116,11 @@ def lambda_handler(event, context):
         return { 
             "statusCode": 200, 
             "body": json2html.convert(response['Items']),  
-            "headers": {
-        'Content-Type': 'text/html'
-    }}
-
-
+            "headers": {'Content-Type': 'text/html'}
+        }
 ```
-Or Use API endpoint using python
+
+#### Sample Client code
 
 ```
 import pandas as pd
@@ -133,7 +137,8 @@ pd.read_json(url)
 
 #### Test: A sample lamdba query
 
-This is a sample lambda function that would serve as an api to query data for a baboon(indiv) between time intervals ```d0``` and ```dt```.
+This is a sample Lambda function that would serve as an api to query data for a baboon(indiv) between 
+times intervals ```t0``` and ```t1```.
 
 Params are:
  
