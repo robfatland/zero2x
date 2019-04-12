@@ -60,8 +60,9 @@ code to this zip file.
 
 - Log in to the AWS console 
   - Create a role named (say) `zero2api` with two attached policies
-    - AmazonAPIGatewayInvokeFullAccess
-    - AmazonDynamoDBReadOnlyAccess
+    - AmazonAPIGatewayInvokeFullAccess (connect Lambda to the API Gateway service)
+    - AmazonDynamoDBReadOnlyAccess     (connect Lambda to the DynamoDB database)
+    - CloudWatchFullAccess             (enable Lambda to write to CloudWatch logs; useful for debugging)
   - Also on the console: Create a Lambda function
     - Specify Python 3.7 
     - Assign the Lambda the `zero2api` role
