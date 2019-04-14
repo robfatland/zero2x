@@ -7,17 +7,18 @@ using a URL (say in your browser) or programmatically from a Python client. An e
 like this: 
 
 ```
-{your_api_url}?indiv=10&table=true&t0=0:20:00&t1=0:30:00
+https://abc1cz4q33.execute-api.us-west-2.amazonaws.com/default/baboon?indiv=10&t0=0:20:00&t1=0:30:00&table=true
 ```
 
 This will retrieve ten minutes of position fixes for one individual in table format (not JSON).
-Since the fixes occur once every two seconds this will be about 300 values.
+Since the fixes occur once every two seconds this will be about 300 values. The query operates on
+the 'indiv' key (which individual) using equality and on the time range t0 -- t1 using 'between'. 
+It is also possible to query on coordinate ranges (x and y). 
 
 
-flag refine this
-
-
-In your custom lambda function add API Gateway with your required configuration and this would yeild {your_api_url}.
+Note incidentally that the base URL `https://abc1...` is provided when the AWS API Gateway is set up. 
+This could conceivably change in the future. It can be made stable by associating an AWS elastic ip
+address with the API Gateway; which will not change over time. 
 
 
 ## Lambda function API
@@ -59,29 +60,36 @@ code to this zip file.
 
 
 - Log in to the AWS console 
-  - Create a role named (say) `zero2api` with two attached policies
+  - Create a role named (say) `zero2api` with these attached policies:
     - AmazonAPIGatewayInvokeFullAccess (connect Lambda to the API Gateway service)
     - AmazonDynamoDBReadOnlyAccess     (connect Lambda to the DynamoDB database)
     - CloudWatchFullAccess             (enable Lambda to write to CloudWatch logs; useful for debugging)
   - Also on the console: Create a Lambda function
     - Specify Python 3.7 
     - Assign the Lambda the `zero2api` role
-    - Upload `function.zip` as the code base
-      - This is un-packed and shown in the Function Code section of the Lambda configuration page
-    - Add environment variables AKEY and SKEY with values taken from an AWS access key
-      - AKEY is the Access Key
-      - SKEY is the Secret Key
-    - In the Designer add an API Gateway (left side) as a trigger for this Lambda function
-      - Click on this to configure it
+    - In the **Function Code** interface: Upload `function.zip` as built above and click `Save` at the top of the page
+      - The zip file is un-packed and shown in the **Function Code** part of the console interface (Configuration tab)
+      - You may now further edit `lambda_function.py`. This changes only the AWS version of course, not your original.
+    - Add **Environment Variables**:
+      - AKEY and SKEY are used by the Python code; values are taken from an AWS access key
+        - AKEY is the Access Key and SKEY is the Secret Key
+        - Anyone with these keys can use this account; if malicious: running up a large bill in just minutes
+        - These keys are defined outside the code and imported via environment variables
+          - This avoids compromising account security
+    - Under **Basic Settings** set the timeout to 5 minutes and the memory to 256MB
+    - In the **Designer** interface (top of the page) add API Gateway (left) as a Lambda trigger
+      - Click on the API Gateway rectangle to activate and configure it (below **Designer**)
         - Create a new API
-        - Open Security
+        - Security: Set as `Open  
         - Deployment stage: Default
         - Click 'Add' at the lower right
-      - Once configured note the API Gateway endpoint information
-        - API, endpoint URL and name: All listed in the Lambda      
+      - Once configured: `Save` the Lambda function
+        - Note the API Gateway endpoint information, particularly the URL
+          - This URL is the basis for API calls
+          - It is used by the API Client (see next section `3_create_client`
 
 
-flag we should be able to do this with just roles, not access keys...
+flag: roles, not access keys
 
 
 This is how the Lambda Function Code section appears:
@@ -90,11 +98,15 @@ This is how the Lambda Function Code section appears:
 ![lambda_ui](https://i.imgur.com/9KFK665.png)
 
 
-This has the necessary `json2html` folder which Lambda will read from our main module lambda_function.py
+Note the bundled `json2html` folder as used by `lambda_function.py`
 
 
 ### Template for `lambda_function.py`
 
+
+flag: This is pretty economical code -- good -- but could use a once over
+
+flag: This only does a query, not a scan
 
 ```
 import json, boto3, os
@@ -127,24 +139,6 @@ def lambda_handler(event, context):
         }
 ```
 
-### Note on sketchy line of code
 
-Found below `response =` and obviously it is a type cast; but we don't know what it is doing and 
-its presence broke the API.
-
-```
-    for item in response['Items']: item['row'] = float(item['row'])
-```
-
-
-### Note on query versus scan
-
-Basic code templates:
-
-```
-    # two query types: query and scan; here are format notes: 
-    #   response = table.query(KeyConditionExpression=Key('indiv').eq(baboon) & Key('time').between(d0, final_dt.strftime("%T")))
-    #   response = table.scan(FilterExpression=Key('indiv').eq(baboon) & Key('x').between(d0, final_dt.strftime("%T")))
-```
-
+### flag should include query versus scan section
 
