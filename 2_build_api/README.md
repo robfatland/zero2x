@@ -1,5 +1,9 @@
 # 2_build_api 
 
+
+<img src="https://github.com/robfatland/pythonbytes/blob/master/2_build_api/baboons.png" alt="Amboseli baboons" width="700"/>
+
+
 ## Introduction
 
 This step creates URL-based query access to the data table published in part 1. This access can be done 
