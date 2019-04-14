@@ -1,7 +1,7 @@
 # 2_build_api 
 
 
-<img src="https://github.com/robfatland/pythonbytes/blob/master/2_build_api/baboons.png" alt="Amboseli baboons" width="700"/>
+<img src="https://github.com/robfatland/Zero2API/blob/master/2_build_api/baboons.png" alt="Amboseli baboons" width="700"/>
 
 
 ## Introduction
