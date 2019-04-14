@@ -18,25 +18,6 @@ for data query/retrieval[.](https://github.com/robfatland/ops)
 - write and test a `client` of the service
 
 
-## Client example code
-
-```
-# baboon API demo
-
-import pandas as pd
-
-indiv = 10
-table_flag = False
-t0 = "0:02:52"
-t1 = "0:03:52"
-
-endpoint = "https://g2j0zbptu6.execute-api.us-east-1.amazonaws.com/default/baboon"
-
-url = endpoint + "?indiv={}&table={}&t0={}&t1={}".format(indiv, table_flag, t0, t1)
-
-pd.read_json(url)
-```
-
 ## Motivation
 
 
