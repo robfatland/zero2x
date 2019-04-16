@@ -1,28 +1,22 @@
 # 2_build_api 
 
 
-<img src="https://github.com/robfatland/Zero2API/blob/master/2_build_api/baboons.png" alt="Amboseli baboons" width="700"/>
-
-
 ## Introduction
 
-This step creates URL-based query access to the data table published in part 1. This access can be done 
-using a URL (say in your browser) or programmatically from a Python client. An example query will look
-like this: 
+This step provides access to the data table published in part 1: Via internet query and response. 
+This transaction can be done using a browser or from a Python program (see part 3). For if you paste 
+the following into a browser address bar:
 
 ```
-https://abc1cz4q33.execute-api.us-west-2.amazonaws.com/default/baboon?indiv=10&t0=0:20:00&t1=0:30:00&table=true
+https://rlu4ch9a57.execute-api.us-west-2.amazonaws.com/default/baboon1?indiv=10&table=true&t0=9:00:00&t1=9:00:22
 ```
 
-This will retrieve ten minutes of position fixes for one individual in table format (not JSON).
-Since the fixes occur once every two seconds this will be about 300 values. The query operates on
-the 'indiv' key (which individual) using equality and on the time range t0 -- t1 using 'between'. 
-It is also possible to query on coordinate ranges (x and y). 
+...you should see a small data table after a few seconds. This is 22 seconds of position fix for individual `10`.
+Individual '10' would resemble the animal wearing the GPS collar in this photograph:
 
 
-Note incidentally that the base URL `https://abc1...` is provided when the AWS API Gateway is set up. 
-This could conceivably change in the future. It can be made stable by associating an AWS elastic ip
-address with the API Gateway; which will not change over time. 
+<img src="https://github.com/robfatland/Zero2API/blob/master/2_build_api/baboons.png" alt="Amboseli baboons" width="550"/>
+
 
 
 ## Lambda function API
