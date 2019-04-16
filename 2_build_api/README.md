@@ -21,28 +21,27 @@ Individual '10' would resemble the animal wearing the GPS collar in this photogr
 
 ## Lambda function API
 
-flag
-
-AWS Lambda functions run code (Python in our case) without provisioning or managing an actual
-computer (Virtual Machine). There *is* a computer involved but we never see this.
-
-
-Python often uses packages that are custom-installed locally. On AWS Lambda the Python environment
-has some basic packages available; but not all possible Python libraries are pre-installed. (The `boto3` 
-package *is* preinstalled to provide Python access to AWS.) To use other packages that are not available 
-by default we zip up a computing environment containing both our Python Lambda code (the file is called
-`lambda_function.py` together with package libraries we want to use.
+This section describes installing the interface using an AWS Lambda function. 
+Lambda functions run code (Python in our case) in response to a trigger which in
+this case is the arrival of a query message. 
 
 
-In our Zero2API case we operate on JSON-format text and so need the `json2html` package.  
-We build a zip file using two `zip` commands. The first zips the package folder recursively and
-the second adds the API code in `lambda_function.py`. See 
+### A note on Python for Lambda
+
+
+Python code often depends upon locally-installed libraries bundled as 'packages'. AWS Lambda supports some
+basic packages plus the AWS interface package called `boto3`. If other packages are needed they must be 
+bundled up and imported into the Lambda configuration environment as zip files. In our case here we want
+the `json2html` package available for our Lambda Python code. See 
 [this link](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html#python-package-dependencies)
 for more on Python deployment packages for AWS Lambda.
 
+#### `json2html` inclusion in a (Python) Lambda function
+
+
 - Create the `lambda_function.py` file in some directory on a Linux system
-  - See template file given below
-- From this same location (being sure to include the periods) issue:
+  - See template file given below; but the file could be empty as we can edit its contents later
+- From this same location (being sure to include the periods as shown) issue:
 
 ```
 $ mkdir package
