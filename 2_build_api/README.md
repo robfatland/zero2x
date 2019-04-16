@@ -3,16 +3,16 @@
 
 ## Introduction
 
-This step provides access to the data table published in part 1: Via internet query and response. 
-This transaction can be done using a browser or from a Python program (see part 3). For if you paste 
+This step provides access to the data table published in part 1 via internet query and response. 
+This transaction uses a browser for manual testing or Python code (see part 3). For example if you paste 
 the following into a browser address bar:
 
 ```
 https://rlu4ch9a57.execute-api.us-west-2.amazonaws.com/default/baboon1?indiv=10&table=true&t0=9:00:00&t1=9:00:22
 ```
 
-...you should see a small data table after a few seconds. This is 22 seconds of position fix for individual `10`.
-Individual '10' would resemble the animal wearing the GPS collar in this photograph:
+...you should see a small data table after a few seconds. This is 22 seconds of position fixes for *individual 10*
+where *individual 10* would resemble the animal wearing the GPS collar in this photograph:
 
 
 <img src="https://github.com/robfatland/Zero2API/blob/master/2_build_api/baboons.png" alt="Amboseli baboons" width="550"/>
@@ -21,27 +21,33 @@ Individual '10' would resemble the animal wearing the GPS collar in this photogr
 
 ## Lambda function API
 
-This section describes installing the interface using an AWS Lambda function. 
-Lambda functions run code (Python in our case) in response to a trigger which in
-this case is the arrival of a query message. 
+
+This section describes installing the table interface using an AWS Lambda function. 
+For our purposes: A Lambda function is Python code that runs in response to some *trigger*;
+here a web query.  
 
 
-### A note on Python for Lambda
+### A note on Python for Lambda functions
 
 
 Python code often depends upon locally-installed libraries bundled as 'packages'. AWS Lambda supports some
-basic packages plus the AWS interface package called `boto3`. If other packages are needed they must be 
-bundled up and imported into the Lambda configuration environment as zip files. In our case here we want
-the `json2html` package available for our Lambda Python code. See 
+basic packages as well as the AWS interface Python package called `boto3`. If other packages are needed they 
+must be bundled up locally and imported into the Lambda configuration environment on the AWS cloud as zip files. 
+In Zero2API we use `json2html` package and so we create a bundle containing that package. See 
 [this link](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html#python-package-dependencies)
 for more on Python deployment packages for AWS Lambda.
 
 #### `json2html` inclusion in a (Python) Lambda function
 
 
-- Create the `lambda_function.py` file in some directory on a Linux system
-  - See template file given below; but the file could be empty as we can edit its contents later
-- From this same location (being sure to include the periods as shown) issue:
+- Create a file called `lambda_function.py` in some Linux working directory. 
+  - If you are running Windows you will first need to install a 
+  [**bash shell/environment**](https://www.windowscentral.com/how-install-bash-shell-command-line-windows-10).
+  - The contents of the file `lambda_function.py` are immaterial at this point; here is why:
+    - Eventually this file will contain Python code for the API
+    - It can be edited through the AWS console as we refine and debug this API
+    - Therefore for the moment the file contents can be placeholder text like `xyz`
+- Noting the period characters '.' in what follows: From the directory containing `lambda_function.py` issue:
 
 ```
 $ mkdir package
@@ -52,41 +58,51 @@ $ cd ../
 $ zip -g function.zip lambda_function.py
 ```
 
-The first `zip` command creates a zip file `function.zip`. The second `zip` command adds the lambda function 
-code to this zip file. 
+The first `zip` command creates a zip file `function.zip` containing the code for the `json2html` package. 
+The second `zip` command adds the `lambda_function.py` code to this zip file. The resulting zip file should
+unbundle properly within the AWS Console interface.
 
 
-- Log in to the AWS console 
-  - Create a role named (say) `zero2api` with these attached policies:
+#### Create the Lambda function on the AWS console
+
+The next step is to transfer the zip file from the previous step to the Amazon cloud and construct the associated Zero2API 
+Lambda function as follows: 
+
+
+- Sign in to the AWS console and follow these procedural steps
+  - Create an IAM Role called `zero2api` and attach these managed policies:
     - AmazonAPIGatewayInvokeFullAccess (connect Lambda to the API Gateway service)
     - AmazonDynamoDBReadOnlyAccess     (connect Lambda to the DynamoDB database)
     - CloudWatchFullAccess             (enable Lambda to write to CloudWatch logs; useful for debugging)
-  - Also on the console: Create a Lambda function
-    - Specify Python 3.7 
-    - Assign the Lambda the `zero2api` role
-    - In the **Function Code** interface: Upload `function.zip` as built above and click `Save` at the top of the page
-      - The zip file is un-packed and shown in the **Function Code** part of the console interface (Configuration tab)
-      - You may now further edit `lambda_function.py`. This changes only the AWS version of course, not your original.
-    - Add **Environment Variables**:
-      - AKEY and SKEY are used by the Python code; values are taken from an AWS access key
-        - AKEY is the Access Key and SKEY is the Secret Key
-        - Anyone with these keys can use this account; if malicious: running up a large bill in just minutes
-        - These keys are defined outside the code and imported via environment variables
-          - This avoids compromising account security
+  - Create a Lambda function
+    - Python 3.7 
+    - Assigned the `zero2api` role from the previous step
+    - In the **Function Code** interface: Upload `function.zip` from above, **Save**
+      - The zip file should unpack and be visible in the **Function Code** area of the Lambda **Configuration** tab
+      - The file `lambda_function.py` can now be further edited
+        - Edits only modify the AWS copy of course, not your original file
+        - Alternatively you can modify, re-zip and re-upload your code
+          - This is slower but keeps local code identical to your AWS code
+    - Add **Environment Variables**
+      - This detail should in principle be deleted; but (flag) this needs to be tested
+      - In the **Environment Variables** section create **AKEY** and **SKEY**
+        - You give these two keys *values* taken from an AWS access key that you generate separately
+          - AKEY is the Access Key and SKEY is the Secret Key
+          - Anyone with these keys can use your account
+          - It is vital that you not place these keys in a public location such as GitHub
+            - Why? Without any exaggeration: Nefarious individuals will appropriate such keys for their personal gain
+            - We have seen firsthand such individuals use access keys to mine bitcoin at a cost of tens of thousands of dollars 
+            - Therefore: Use extreme caution in managing access keys
     - Under **Basic Settings** set the timeout to 5 minutes and the memory to 256MB
-    - In the **Designer** interface (top of the page) add API Gateway (left) as a Lambda trigger
+    - In the **Designer** interface (top of the **Configuration** page) add API Gateway (left side) as a Lambda trigger
       - Click on the API Gateway rectangle to activate and configure it (below **Designer**)
         - Create a new API
-        - Security: Set as `Open  
+        - Security: Set as **Open** or as desired  
         - Deployment stage: Default
-        - Click 'Add' at the lower right
-      - Once configured: `Save` the Lambda function
-        - Note the API Gateway endpoint information, particularly the URL
-          - This URL is the basis for API calls
-          - It is used by the API Client (see next section `3_create_client`
-
-
-flag: roles, not access keys
+        - **Add** button, lower right
+    - **Save** the Lambda function
+      - Note the resulting API Gateway endpoint URL
+        - This URL is the basis for API call; see see next section `3_create_client`
 
 
 This is how the Lambda Function Code section appears:
@@ -95,15 +111,17 @@ This is how the Lambda Function Code section appears:
 ![lambda_ui](https://i.imgur.com/9KFK665.png)
 
 
-Note the bundled `json2html` folder as used by `lambda_function.py`
-
-
 ### Template for `lambda_function.py`
 
 
-flag: This is pretty economical code -- good -- but could use a once over
+The `lambda_function.py` file will run in response to a web query passed in the form of a query string appended to a 
+base URL. The Lambda function will interpret this string to formulate a query that is applied to the DynamoDB table
+published in step 1. The results of this query are then bundled either as HTML or JSON and returned to the calling 
+entity.
 
-flag: This only does a query, not a scan
+
+Here is example code for the `lambda_function.py` file.
+
 
 ```
 import json, boto3, os
@@ -137,5 +155,5 @@ def lambda_handler(event, context):
 ```
 
 
-### flag should include query versus scan section
+### query versus scan
 
