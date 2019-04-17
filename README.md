@@ -4,6 +4,9 @@
 
 This repo considers fast (time scale ~ one hour) publication of tabular data together with an active API 
 for data query/retrieval[.](https://github.com/robfatland/ops)
+To get the deployment time down to one hour for a new dataset: You will need to do some advance preparation
+and possibly some practice. This repo has three subfolders: Sequential walk-throughs `1_publish_table`, 
+`2_build_api` and `3_create_client`.
 
 
 ### Quick procedural summary
