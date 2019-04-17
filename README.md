@@ -3,9 +3,14 @@
 ## Overview
 
 This repo considers fast (time scale ~ one hour) publication of tabular data together with an active API 
-for data query/retrieval[.](https://github.com/robfatland/ops)
-To get the deployment time down to one hour for a new dataset: You will need to do some advance preparation
-and possibly some practice. This repo has three subfolders: Sequential walk-throughs `1_publish_table`, 
+for data query/retrieval[.](https://github.com/robfatland/ops) 
+[Here is a link](https://docs.google.com/presentation/d/1LVCK0Szvvyhhgzuvk1U19P8XL9qaAKOuDXEJcYeAVTA/edit?usp=sharing)
+to a presentation on this topic from FOSS4G-NA 2019.
+
+
+'On hour to publish' sounds nice but we'd like to not over-promise. 
+To get the deployment time down in that one hour range: You will need to do some advance preparation
+and also do some practice. This repo has three subfolders to treat as sequential walk-throughs `1_publish_table`, 
 `2_build_api` and `3_create_client`.
 
 
@@ -24,7 +29,10 @@ and possibly some practice. This repo has three subfolders: Sequential walk-thro
 ## Motivation
 
 
-* **Why?** Science advances when data availability is not an obstacle; but too often it *is* an obstacle. We see a need to publish, pay for and then 'forget about' datasets knowing they will be there for five years. We call this **data provisioning**. From Data Management Plans to team collaborations there are many incentives and many opportunities to make *small* *specialized* datasets easy to access via RESTful interface queries with no maintenance. 
+* **Why?** Science advances when data availability is not an obstacle; but often it *is*. Here we are facilitating 
+publishing a modest dataset (up to 25GB) for 5 years for $300. Desirable: After you publish it you never have to 
+think about it again. It's just *there* for anyone to use. Such **data provisioning** comes with a simple interface
+(that you the publisher would build) flag. From Data Management Plans to team collaborations there are many incentives and many opportunities to make *small* *specialized* datasets easy to access via RESTful interface queries with no maintenance. 
 * **How?** We create publication patterns built from real *need-driven* use cases. We distill away details the publishing Researcher does not need. The Researcher follows the pattern, tests the resulting access protocol (API), and gets on with their research. 
 * **What?** We will prototype this system on the AWS and Google public clouds using simple datasets. We will address a number of sub-topics including documentation, data security, API design and composition, registration, complexity, cost, source citation, discovery and technology obsolescence. We will then rinse-and-repeat with more complicated datasets until the money runs out. 
 
