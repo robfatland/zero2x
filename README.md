@@ -35,18 +35,21 @@ touch on more specifics of data-driven research from writing good Data Managemen
 to supporting team collaboration to demonstrating data democratization to reproducibility. 
 * **How?** We create a publication pattern built from real *need-driven* use cases. 
 Our model for self-publishing datasets presumes domain expertise applied to the data; an informed
-(but not dictatorial) frame of mind. The procedural depends in particulars on the AWS cloud technology stack;  
+(but not dictatorial) frame of mind. The procedural depends in particulars on the AWS cloud technology stack;
 but with an open design that would easily translate to other clouds. Three provided Python code templates
 do the work where the second in the sequence, the API translator, requires the bulk of the effort. 
-We also provide a test dataset and of course the procedural. 
-* **What?** We prototype a system on the AWS public cloud with two culmination points. First the simple
-access API receives simple query results (HTML or JSON). Second we build a *composition API* that delivers
-a higher-level or derived product; which itself makes use of the first API. 
-We address sub-topics in passing including documentation, data security, API design and composition, 
-registration, complexity, cost, source citation, discovery and obsolescence. 
+We also provide a test dataset and of course the procedural. From there it is a matter of messaging
+availability and in the tradition of open source seeing how community trial and adoption goes.
+* **What?** We prototype a system on the AWS public cloud with two culmination points. First the 
+table access API returns simple query results (HTML or JSON). Second we build a *composition API* that 
+delivers a higher-level derived results: Speed and dispersion for the group of individuals described
+by the data table. The derived result API makes use of the table access API. We address sub-topics 
+in passing including documentation, data security, API design, registration of the resource, 
+complexity, cost, source citation, discovery and obsolescence. 
 
 
-### Furthermore...
+### Furthermore... the extended narrative
+
 
 It can be tempting to try and build extensive customization into the access API. Our suggestion is to
 make the access API as simple as possible.  This avoids anticipating future use and *does not prevent*
@@ -58,26 +61,21 @@ sensor data, water temperature records, bird counts, sport fishing catch reports
 field data and so on.
 
 
-flag
+With all this in hand we now give a longer narrative of the procedure covered in sections 1, 2 and 3.
 
-### Extended Narrative
 
-This needs a lot of updating...
+We begin with a tabular dataset (CSV file) that you are welcome to use for practice.
+Here is a link to the 
+[(back-story link)](https://en.wikipedia.org/wiki/Amboseli_Baboon_Research_Project) of this dataset.
+The CSV file has 1048576 rows in four columns and includes a header row **`indiv, time, x, y`**. 
+Each row is a GPS fix converted to meters relative to an arbitrary local reference origin. Fixes were recorded
+every two seconds for 26 individuals within a larger *congress* of baboons over the course of one day.
+The individual identifiers are 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 
+21, 23, 24, 25, 31, 33, 35 and 38.
 
-We begin with a tabular dataset (CSV file)
-[(back-story link)](https://en.wikipedia.org/wiki/Amboseli_Baboon_Research_Project)
-of 1048576 rows and four columns including a header **`indiv, time, x, y`**. Each row is a GPS
-fix in meters relative to an arbitrary reference. These were recordead every two seconds for 25 
-individual baboons over the course of a day. Proceeding on AWS:
-
-- Set up an AWS account; we will be using DynamoDB so that must be enabled
-- On a local machine AWS API is installed (called the AWS *CLI* for Command Line Interface)
-- On GitHub the Researcher clones the Zero2API repository and re-name it to suit the data
-  - Herein are files: *requirements.txt*, *api.py*, *client.ipynb*, *client.py*, *README.md*, *load.sh*, *table.csv*
-  - There are also two launch buttons: For **binder** and **colab**
-  - There is some CI machinery...
-
-- *README.md* renders as an instruction manual
+- Set up an AWS account; select a working **region**, ensure DynamoDB is enabled in that region
+- Your local machine: Install the `boto3` Python package (the AWS interface library)
+- Your local machine: Clone this Zero2API repository. You may wish to re-name it to suit your project
   - *load.sh* is edited to reflect the dataset. 
     - It is run once with a 'credentials' argument to establish a safe cloud access path
     - It is run a second time with a `load_data` argument
