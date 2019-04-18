@@ -74,35 +74,21 @@ The individual identifiers are 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
 21, 23, 24, 25, 31, 33, 35 and 38.
 
 - Set up an AWS account; select a working **region**, ensure DynamoDB is enabled in that region
+- In DynamoDB set up an appropriate table; and note the endpoint URL
 - Your local machine: Install the `boto3` Python package (the AWS interface library)
-- Your local machine: Clone this Zero2API repository. You may wish to re-name it to suit your project
-  - *load.sh* is edited to reflect the dataset. 
-    - It is run once with a 'credentials' argument to establish a safe cloud access path
-    - It is run a second time with a `load_data` argument
-      - by default this will publish the example *table.csv* data
-      - a service URL is returned
-      - the data are now resident on a cloud database service
-      - A simple/trivial API is now active at the service URL
+- Use `DynamoDB_load.py` to push the data to the DynamoDB table
 
 
-The above steps are the first half of the process. They require about an hour given our starting assumptions. 
+The above steps are the first 'third' of the process. They require about an hour given our starting assumptions. 
 This does not include the time required to prepare the data as a flat table nor the time to set up the cloud 
 account with credentials. 
 
 The second part of the process involves refining the data access interface or API (Application Programming Interface). 
 
-- *api.py* is edited 
-  - *load.sh* is run with a `push_api` argument to pushed the API code to the cloud
-    - This supersedes the default/prior API code
-- *client.ipynb* and/or *client.py* is modified and used to test the API
-- These steps are iterated as needed
+- couple details needed flag
 
 
-Once data provisioning and API development are complete the data service will incur a monthly cost. Suppose this 
-is $10 per month and the objective is to maintain the data service for five years. The total cost of $600 might
-grow depending on data download charges (ten cents per GB). A cost estimate and a pre-pay mechanism are needed 
-and will be addressed in this proposed work. 
-
-
-Note that once the publication of the data is complete the Researcher's modified repository -- particularly the 
-*Client* code -- becomes the reference for the API, i.e. for anyone to create a data service Client. 
+Once data provisioning and API development are complete the data service will incur a monthly cost. 
+Our estimate is $5 (USD) per month or $300 for five years. Once the dataset is published a GitHub 
+repo is one obvious means to provide the API reference. Calling the API with no arguments might 
+return a reference to this repo (or a docstring if that will suffice). 
