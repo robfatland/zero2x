@@ -29,38 +29,36 @@ and also do some practice. This repo has three subfolders to treat as sequential
 ## Motivation
 
 
-* **Why?** Science advances when data availability is not an obstacle; but often it *is*. Here we are facilitating 
-publishing a modest dataset (up to 25GB) for 5 years for $300. Desirable: After you publish it you never have to 
-think about it again. It's just *there* for anyone to use. Such **data provisioning** comes with a simple interface
-(that you the publisher would build) flag. From Data Management Plans to team collaborations there are many incentives and many opportunities to make *small* *specialized* datasets easy to access via RESTful interface queries with no maintenance. 
-* **How?** We create publication patterns built from real *need-driven* use cases. We distill away details the publishing Researcher does not need. The Researcher follows the pattern, tests the resulting access protocol (API), and gets on with their research. 
-* **What?** We will prototype this system on the AWS and Google public clouds using simple datasets. We will address a number of sub-topics including documentation, data security, API design and composition, registration, complexity, cost, source citation, discovery and technology obsolescence. We will then rinse-and-repeat with more complicated datasets until the money runs out. 
+* **Why?** Science advances when data availability is not an obstacle; but often it *is*. We built this open tool 
+for data publication as a set of templates to overcome this obstacle. There are many additional motivations that 
+touch on more specifics of data-driven research from writing good Data Management Plans -- and executing on them --
+to supporting team collaboration to demonstrating data democratization to reproducibility. 
+* **How?** We create a publication pattern built from real *need-driven* use cases. 
+Our model for self-publishing datasets presumes domain expertise applied to the data; an informed
+(but not dictatorial) frame of mind. The procedural depends in particulars on the AWS cloud technology stack;  
+but with an open design that would easily translate to other clouds. Three provided Python code templates
+do the work where the second in the sequence, the API translator, requires the bulk of the effort. 
+We also provide a test dataset and of course the procedural. 
+* **What?** We prototype a system on the AWS public cloud with two culmination points. First the simple
+access API receives simple query results (HTML or JSON). Second we build a *composition API* that delivers
+a higher-level or derived product; which itself makes use of the first API. 
+We address sub-topics in passing including documentation, data security, API design and composition, 
+registration, complexity, cost, source citation, discovery and obsolescence. 
 
 
-### Is and Is Not
+### Furthermore...
+
+It can be tempting to try and build extensive customization into the access API. Our suggestion is to
+make the access API as simple as possible.  This avoids anticipating future use and *does not prevent*
+subsequently building other APIs. This brings us to *composition*: Once a dataset is emplaced we are 
+free to write a second data service (and a third, and a fourth, ...) built upon the first and potentially 
+making use of other resources. As an example consider predicting juvenile salmon survival rates in a
+river. Such a service could be composed of (informed by) precipitation and stream gauge data, turbidity 
+sensor data, water temperature records, bird counts, sport fishing catch reports, water chemistry 
+field data and so on.
 
 
-The goal here is rapid self-publication of a tabular dataset. Ultimately we would like a pay-in-advance model for the cloud
-resources so that the published data are available for a specified time without any upkeep (if the underlying services 
-are stable, a big *if* we admit).
-
-This project integrates a few technology components -- 
-particularly cloud services like serverless computing -- with some Python code to provide flexible implementation. 
-This is not a comprehensive solution however. The data capacity is limited and there is very little anticipation of 
-*large robust data system* behavior.
-
-*It might be tempting to try and build a lot of customization
-into the access API. Suggestion: Make the access API as simple as possible. 
-This avoids anticipating future use (may be inaccurate) without prohibiting subsequent composition...*
-
-
-A second aspect of this project is *composition*: Once a dataset is emplaced we are free to write a second data 
-service (and third, fourth, ...) built upon the first and potentially on other resources. As an example consider a 
-high-level task of predicting juvenile salmon survival rates. Such a service could be composed / synthesized from 
-precipitation and stream gauge data, turbidity measurements, water temperature records, predator appraisals such as 
-bird counts or sport fishing catch reports, and water chemistry field data. These may be from disparate data resources. 
-
-
+flag
 
 ### Extended Narrative
 
