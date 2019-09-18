@@ -99,5 +99,5 @@ def lambda_handler(event, context):
         rs += ' ({}, {}, {})'.format(str(x), str(y), str(z))
         if hardMode: rs += ' (hard mode)'
     return { "statusCode": 200, "body": rs }
-    ```
+```
 
