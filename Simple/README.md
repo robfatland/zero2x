@@ -122,6 +122,8 @@ def lambda_handler(event, context):
 
 ## Simple example (prime factorization) image sequence
 
+Initiate the process of creating a new Lambda function.
+<br><br>
 <img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf01.png" alt="Prime factorization Lambda service" width="700"/>
 <br><br>
 <img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf02.png" alt="Prime factorization Lambda service" width="700"/>
@@ -132,7 +134,9 @@ def lambda_handler(event, context):
 <br><br>
 <img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf05.png" alt="Prime factorization Lambda service" width="700"/>
 <br><br>
-<img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf06.png" alt="Prime factorization Lambda service" width="700"/>
+Create the Lambda function.
+<br><br>
+<img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf06.png" alt="Prime factorization Lambda service" width="200"/>
 <br><br>
 <img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf07.png" alt="Prime factorization Lambda service" width="700"/>
 <br><br>
