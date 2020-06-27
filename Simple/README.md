@@ -1,29 +1,48 @@
 # Simple example
 
-Here is some Lambda code.
+Let's build a prime factorization service as a Lambda function on AWS. 
 
+- Get an account, sign in to the AWS Management Console
+- Navigate to AWS Services > Lambda, click Create Function
+- Follow the steps in the photo guide at the bottom of this page. I give them here in outline:
+  - Create a new Lambda function; give it a name, choose Python 3
+  - Create an Execution role: Use the defaults to get a basic execution policy: allows the Lambda to run
+  - Add an API Gateway to trigger the Lambda function, note the endpoint this generates
+  - Copy the Python code below into the code editor
+  - Copy the endpoint URL from above, append `?n=2020`:  In a browser address bar
+    - This should return a text string in your browser: The prime factorization of 2020
+  
 ```
+# From Zero2API / Simple on GitHub
+# In browser: https://kep5pu8n09.execute-api.us-west-2.amazonaws.com/default/primefactors?n=4700
+
 import json
-import math
-# from numpy import sqr
 
 def lambda_handler(event, context):
-    x = float(event["queryStringParameters"]['x'])
-    xmo = x - 1.
-    s = 1.
-    s += xmo/2.
-    s -= xmo*xmo/8.
-    s += xmo*xmo*xmo/16.
-    s -= (5./128.)*xmo*xmo*xmo*xmo
-    # if x < 0.: sqrtx = 'something times i'
-    # else: sqrtx = str(np.sqrt(x))
-    # rtn_sqrtx = str(s)
-    rtn_sqrtx = str(math.sqrt(x))
-    return { "statusCode": 200, "body": rtn_sqrtx }
+    return_msg, n0 = '', int(event["queryStringParameters"]['n'])
+
+    if n0 < 2:
+        n0 = 103598728
+        return_msg += 'Could not parse input; using n = '
+
+    return_msg += str(n0) + ' = '
+    prime_factors, factor_candidate, n = [], 2, n0
+    while factor_candidate ** 2 <= n:
+        if n % factor_candidate:
+            if factor_candidate == 2: factor_candidate = 3
+            else:                     factor_candidate += 2
+        else:
+            n = n / factor_candidate
+            prime_factors.append(factor_candidate)
+    if n > 1: prime_factors.append(n)
+        
+    npf = len(prime_factors)
+    for i in range(npf - 1): return_msg += str(prime_factors[i]) + ' * '
+    return_msg += str(int(prime_factors[npf - 1]))
+    return { "statusCode": 200, "body": return_msg }
 ```
 
-So this plus an API Gateway connected as input to the Lambda gets the job done. 
-Here is a slightly more complicated example for "dronebees".
+Here is an unrelated and more complicated program for a middle school coding challenge called "dronebees".
 
 ```
 # debug: include 'print(d)' and use the Monitoring tab to find/read the log
