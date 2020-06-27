@@ -157,6 +157,9 @@ Here we note down the URL. This is what is used in the browser to run the Lambda
 <br><br>
 <img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf11.png" alt="Prime factorization Lambda service" width="700"/>
 <br><br>
+Here is the browser exchange where the result is the factorization of 2020. Notice how the URL from above has `?n=2020` appended. 
+This tells the Lambda function which number you want it to factorize.
+<br><br>
 <img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf12.png" alt="Prime factorization Lambda service" width="700"/>
 
 
