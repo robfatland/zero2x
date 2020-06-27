@@ -120,3 +120,20 @@ def lambda_handler(event, context):
     return { "statusCode": 200, "body": rs }
 ```
 
+## Simple example (prime factorization) image sequence
+
+<img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf01.png" alt="Prime factorization Lambda service" width="550"/>
+<img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf02.png" alt="Prime factorization Lambda service" width="550"/>
+<img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf03.png" alt="Prime factorization Lambda service" width="550"/>
+<img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf04.png" alt="Prime factorization Lambda service" width="550"/>
+<img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf05.png" alt="Prime factorization Lambda service" width="550"/>
+<img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf06.png" alt="Prime factorization Lambda service" width="550"/>
+<img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf07.png" alt="Prime factorization Lambda service" width="550"/>
+<img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf08.png" alt="Prime factorization Lambda service" width="550"/>
+<img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf09.png" alt="Prime factorization Lambda service" width="550"/>
+<img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf10.png" alt="Prime factorization Lambda service" width="550"/>
+<img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf11.png" alt="Prime factorization Lambda service" width="550"/>
+<img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf12.png" alt="Prime factorization Lambda service" width="550"/>
+
+
+
