@@ -126,7 +126,11 @@ Initiate the process of creating a new Lambda function.
 <br><br>
 <img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf01.png" alt="Prime factorization Lambda service" width="700"/>
 <br><br>
+Name resources as you go, particularly the Lambda function and its API Gateway (steps 7 -- 9).
+<br><br>
 <img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf02.png" alt="Prime factorization Lambda service" width="700"/>
+<br><br>
+The execution role can be the simplest default 'new role'. It is automatically given the basic Lambda execution policy; and that is all we need here.
 <br><br>
 <img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf03.png" alt="Prime factorization Lambda service" width="700"/>
 <br><br>
@@ -134,9 +138,12 @@ Initiate the process of creating a new Lambda function.
 <br><br>
 <img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf05.png" alt="Prime factorization Lambda service" width="700"/>
 <br><br>
-Create the Lambda function.
+Create the Lambda function. Once it is in place we add an internet connector ('API Gateway') and the Python code that does the calculation.
 <br><br>
 <img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf06.png" alt="Prime factorization Lambda service" width="200"/>
+<br><br>
+The next steps establish an API Gateway. When you invoke the Lambda function by typing a URL into your browser: It is the Gateway that registers this and 
+actually triggers the Lambda. 
 <br><br>
 <img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf07.png" alt="Prime factorization Lambda service" width="700"/>
 <br><br>
