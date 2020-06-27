@@ -161,6 +161,9 @@ Here is the browser exchange where the result is the factorization of 2020. Noti
 This tells the Lambda function which number you want it to factorize.
 <br><br>
 <img src="https://github.com/robfatland/Zero2API/blob/master/Simple/pf12.png" alt="Prime factorization Lambda service" width="700"/>
-
+<br><br><br>
+Finally: While using the browser is a good way to check that the Lambda is working, it is not the main idea. Typically we write
+some code that communicates with the Lambda function using the http protocol. Once this code is running we can leave the Lambda
+function in place as an operational data source.
 
 
