@@ -1,7 +1,7 @@
 
 
 """
-    Utility script to load data into dynamodb.
+    Python utility to load tabular CSV data into an AWS DynamoDB table
 """
 
 import os
@@ -22,8 +22,7 @@ def load_creds():
         data upload to s3 bucket.
     """
     home = expanduser("~")
-    with open(os.path.join(home, 'creds.json')) as creds_file:
-        creds_data = json.load(creds_file)
+    with open(os.path.join(home, 'creds.json')) as creds_file: creds_data = json.load(creds_file)
     return creds_data
 
 def dynamodb_upload(data_frame):
