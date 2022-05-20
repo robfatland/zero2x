@@ -48,6 +48,24 @@ az network vnet create --resource-group rob5z2jh01 --name rob5z2jh01-vnet --addr
 Ignoring the JSON text flush; on to setting two ID variables.
 
 
+```
+VNET_ID=$(az network vnet show --resource-group rob5z2jh01 --name rob5z2jh01-vnet --query id --output tsv)
+SUBNET_ID=$(az network vnet subnet show --resource-group rob5z2jh01 --vnet-name rob5z2jh01-vnet --name rob5z2jh01-subnet --query id --output tsv)
+```
+
+I now tried to execute this: 
+
+
+```
+SP_PASSWD=$(az ad sp create-for-rbac --name rob5z2jh01-sp --role Contributor --scopes rob5z2jh01-vnet --query password --output tsv)
+```
+
+
+However I received `ERROR: The request did not have a subscription or a valid tenant level resource provider.` The instructions 
+indicate that I need Owner role for this to succeed; so that may be the issue. I look this up under Subscription > IAM and find 
+that I am a Contributor, not an Owner. So that was a good start but it is time to up my ranking before trying again. 
+
+
 
 
 
