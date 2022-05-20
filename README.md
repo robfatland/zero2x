@@ -1,9 +1,20 @@
-# Zero2API
+# Zero2x
 
-## Overview
+Notes on building CI from scratch
+
+## Zero2JupyterHub
+
+
+Let's sort out how this goes on Azure. [Instructions](https://zero-to-jupyterhub.readthedocs.io/en/latest/)
+
+
+## Zero2API
+
+
+### Overview
 
 This repo considers fast (time scale ~ one hour) publication of tabular data together with an active API 
-for data query/retrieval[.](https://github.com/robfatland/ops) 
+for data query/retrieval.
 [Here is a link](https://docs.google.com/presentation/d/1LVCK0Szvvyhhgzuvk1U19P8XL9qaAKOuDXEJcYeAVTA/edit?usp=sharing)
 to a presentation on this topic from FOSS4G-NA 2019.
 
