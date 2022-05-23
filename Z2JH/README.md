@@ -16,8 +16,14 @@ on Azure.
     - environment variable assignments were lost
     - commands to recreate them are still available in `history`
 - What is the care and feeding going to look like?
+    - Part One: What is the complete "box of toys" including those generated automatically / invisibly
+    - Part Two: What is likely to break or need attention in one / three / six / twelve / 24 months?
+    - Part Three: How do we respond when the team wants to install additional...?
+        - Python modules (and how do ***environments*** factor in?)
+        - Software, from MATLAB to Tableau
 - What is the Z2JH the high-level breakdown?
     - Set up K8 (Kubernetes plus Helm)
+        - Why should I fear the phrase `RequestDisallowedByPolicy`?
     - Set up Jupyter Hub
     - Administrate
     - Resources
