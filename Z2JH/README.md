@@ -5,8 +5,12 @@ on Azure.
 
 ## The FAQ we would like to find (while learning this)
 
-- If I am interrupted mid-stream: What becomes of my work?
-    - Using the interactive cloud shell both file structure and cloud resources are present upon resuming from an interruption
+- If I am interrupted mid-process: What becomes of my work?
+    - I used the interactive cloud shell 
+    - file system modifications were intact (e.g. key pair files) 
+    - cloud resources (RG, vnet, subnet) were still present
+    - environment variable assignments were lost
+    - commands to recreate them are still available in `history`
 - What is the care and feeding going to look like?
 - What is the Z2JH the high-level breakdown?
     - Set up K8 (Kubernetes plus Helm)
@@ -58,21 +62,24 @@ VNET_ID=$(az network vnet show --resource-group rob5z2jh01 --name rob5z2jh01-vne
 SUBNET_ID=$(az network vnet subnet show --resource-group rob5z2jh01 --vnet-name rob5z2jh01-vnet --name rob5z2jh01-subnet --query id --output tsv)
 ```
 
-I now tried to execute this: 
+In both of these cases we set the variable `XXX_ID` to the output of the az command. For example `echo $SUBNET_ID` produces
 
 
 ```
-SP_PASSWD=$(az ad sp create-for-rbac --name rob5z2jh01-sp --role Contributor --scopes rob5z2jh01-vnet --query password --output tsv)
+/subscriptions/c8c8c8c8-0a0a-4a4a-baba-7c7c7c7c7c7c/resourceGroups/rob5z2jh01/providers/Microsoft.Network/virtualNetworks/rob5z2jh01-vnet/subnets/rob5z2jh01-subnet
 ```
 
-
-However I received `ERROR: The request did not have a subscription or a valid tenant level resource provider.` The instructions 
-indicate that I need Owner role for this to succeed; so that may be the issue. I look this up under Subscription > IAM and find 
-that I am a Contributor, not an Owner. So that was a good start but it is time to up my ranking before trying again. 
+I now ensured my IAM Role was Owner and ran: 
 
 
-With some hassles I realigned my User account with the Owner role (promoted from Contributor) and ran these two 'are they still there'
-commands:
+```
+SP_PASSWD=$(az ad sp create-for-rbac --name rob5z2jh01-sp --role Contributor --scopes $VNET_ID --query password --output tsv) 
+```
+
+This completed with four WARNING messages including one about 'credentials that you must protect'.
+
+I left and came back later, using these commands to ensure the resources were still in place: 
+
 
 ```
 az group list --output table
@@ -80,7 +87,8 @@ az network vnet list --output table
 ```
 
 `--output table` avoids having to stare at disgusting JSON content. My key files are still present in the subfolder
-I made for this project in the interactive shell.
+I made for this project in the interactive shell. I did re-run the `VNET_ID` and `SUBNET_ID` alias commands out of
+history. 
 
 
 
