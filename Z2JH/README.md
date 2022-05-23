@@ -5,6 +5,10 @@ on Azure.
 
 ## The FAQ we would like to find (while learning this)
 
+- As we proceed, creating resources, what is a good naming scheme?
+    - choose a short base string (I use `r5`)
+    - For each resource: Add a hyphen and ideally a two-character identifier
+    - Example: A resource group and a service principal are respectively `r5-rg` and `r5-sp`
 - If I am interrupted mid-process: What becomes of my work?
     - I used the interactive cloud shell 
     - file system modifications were intact (e.g. key pair files) 
@@ -127,3 +131,11 @@ az aks create --name rob5z2jh01-aks-cluster --resource-group rob5z2jh01 --ssh-ke
 
 ...and I get a lot of red ink including the phrase `RequestDisallowedByPolicy`. 
 
+
+To make sense of this and fix it we refer to the "process so far". We created a resource group that 
+we find [from this faq](https://docs.microsoft.com/en-us/azure/aks/faq) is one of two needed. This
+first RG. It contains the Kubernetes service resource. 
+
+
+The second RG is created automatically and has a name assigned by default of the form 
+`MC_myResourceGroup_myAKSCluster_westus2`. 
