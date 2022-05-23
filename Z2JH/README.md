@@ -1,6 +1,9 @@
-Let's have some fun on Azure.
+Let's have some fun building [Jupyter Hub infrastructure](https://zero-to-jupyterhub.readthedocs.io/en/latest/)
+on Azure.
 
-## FAQ
+
+
+## The FAQ we would like to find (while learning this)
 
 - If I am interrupted mid-stream: What becomes of my work?
 - What is the care and feeding going to look like?
