@@ -6,6 +6,7 @@ on Azure.
 ## The FAQ we would like to find (while learning this)
 
 - If I am interrupted mid-stream: What becomes of my work?
+    - Using the interactive cloud shell both file structure and cloud resources are present upon resuming from an interruption
 - What is the care and feeding going to look like?
 - What is the Z2JH the high-level breakdown?
     - Set up K8 (Kubernetes plus Helm)
@@ -18,6 +19,7 @@ on Azure.
 
 ## Notes from starting K8 on Azure
 
+- from home base (z2jh) navigate to the [AKS instructions](https://zero-to-jupyterhub.readthedocs.io/en/latest/kubernetes/microsoft/step-zero-azure.html)
 - choose to use the Azure interactive shell to use the `az` Azure command line.
 - log in to portal.azure.com
 - choose the correct subscription by un-checking a default blinder
@@ -69,6 +71,16 @@ indicate that I need Owner role for this to succeed; so that may be the issue. I
 that I am a Contributor, not an Owner. So that was a good start but it is time to up my ranking before trying again. 
 
 
+With some hassles I realigned my User account with the Owner role (promoted from Contributor) and ran these two 'are they still there'
+commands:
+
+```
+az group list --output table
+az network vnet list --output table
+```
+
+`--output table` avoids having to stare at disgusting JSON content. My key files are still present in the subfolder
+I made for this project in the interactive shell.
 
 
 
