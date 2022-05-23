@@ -76,7 +76,19 @@ I now ensured my IAM Role was Owner and ran:
 SP_PASSWD=$(az ad sp create-for-rbac --name rob5z2jh01-sp --role Contributor --scopes $VNET_ID --query password --output tsv) 
 ```
 
-This completed with four WARNING messages including one about 'credentials that you must protect'.
+This completed with four WARNING messages including one about 'credentials that you must protect'. These credentials are
+the value of the `SP_PASSWD` variable (I presume).
+
+
+To see details of this Service Principal (sp) we have
+
+```
+az ad sp list --show-mine
+```
+
+This produces a block of JSON. Copy out the servicePrincipalNames string: `88888888-4444-4444-4444-121212121212` 
+for use setting the `SP_ID` variable below. I will refer to these as 844412 strings.
+
 
 I left and came back later, using these commands to ensure the resources were still in place: 
 
@@ -86,16 +98,32 @@ az group list --output table
 az network vnet list --output table
 ```
 
-`--output table` avoids having to stare at disgusting JSON content. My key files are still present in the subfolder
+`--output table` avoids having to stare at too much JSON. My key files are still present in the subfolder
 I made for this project in the interactive shell. I did re-run the `VNET_ID` and `SUBNET_ID` alias commands out of
 history. 
 
 
+Next: 
 
 
+```
+SP_ID=$(az ad sp show --id aaaaaaaa-d2d2-4848-9876-b6a7a7a7a7a7 --query appId --output tsv)
+```
 
 
+This is very unclear: I think the idea is to load in the 844412 string using this `az ad sp` command 
+for the Service Principal but I just pulled it from the JSON earlier. 
 
 
+Now to bring it all together and create the Azure kubernetes service (AKS) cluster.
 
+
+```
+az aks create --name rob5z2jh01-aks-cluster --resource-group rob5z2jh01 --ssh-key-value ssh-key-rob5z2jh01.pub \
+   --node-count 3 --node-vm-size Standard_D2s_v3 --service-principal $SP_ID --client-secret $SP_PASSWD         \
+   --dns-service-ip 10.0.0.10 --docker-bridge-address 172.17.0.1/16 --network-plugin azure                     \
+   --network-policy azure --service-cidr 10.0.0.0/16 --vnet-subnet-id $SUBNET_ID --output table
+```
+
+...and I get a lot of red ink including the phrase `RequestDisallowedByPolicy`. 
 
