@@ -5,10 +5,14 @@ on Azure.
 
 ## The FAQ we would like to find (while learning this)
 
-- As we proceed, creating resources, what is a good naming scheme?
+- Any supporting links?
+    - [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/faq):
+Orchestrate containers to run Jupyter notebook servers
+- As we proceed with creating Azure resources: What is a good naming scheme?
     - choose a short base string (I use `r5`)
-    - For each resource: Add a hyphen and ideally a two-character identifier
+    - For each resource: Add a hyphen and two-character identifier
     - Example: A resource group and a service principal are respectively `r5-rg` and `r5-sp`
+        - (A service principal is an automaton)
 - If I am interrupted mid-process: What becomes of my work?
     - I used the interactive cloud shell 
     - file system modifications were intact (e.g. key pair files) 
