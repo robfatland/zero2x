@@ -6,9 +6,11 @@ on Azure.
 ## The FAQ we would like to find (while learning this)
 
 - Any supporting links?
-    - [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/faq):
-Orchestrate containers to run Jupyter notebook servers
-- As we proceed with creating Azure resources: What is a good naming scheme?
+    - [The Naomi Formulation](https://curious-poppyseed-2cf.notion.site/Zero-To-Jupyterhub-Script-83866ee697964443a579d5b3f2500e4b)
+    - Original [ZeroToJupyterHub site](https://zero-to-jupyterhub.readthedocs.io/en/latest/) (can become outdated in some details)
+    - An FAQ on the [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/faq) for orchestrating containers
+    - [This page](https://github.com/robfatland/zero2x/edit/master/Z2JH/README.md)
+- As we proceed with creating many Azure resources: Good naming scheme?
     - choose a short base string (I use `r5`)
     - For each resource: Add a hyphen and two-character identifier
     - Example: A resource group and a service principal are respectively `r5-rg` and `r5-sp`
@@ -35,7 +37,7 @@ Orchestrate containers to run Jupyter notebook servers
 - Should I do Littlest Jupyter Hub or this one?
 
 
-## Notes from starting K8 on Azure
+## Notes from following K8 on Azure
 
 - from home base (z2jh) navigate to the [AKS instructions](https://zero-to-jupyterhub.readthedocs.io/en/latest/kubernetes/microsoft/step-zero-azure.html)
 - choose to use the Azure interactive shell to use the `az` Azure command line.
