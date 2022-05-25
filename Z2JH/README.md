@@ -96,86 +96,105 @@ az network vnet create \
 
 
 I call this file `next01` and run it with `source next01`. It takes a minute and dumps some JSON if it works.
+It creates both a VNET and a SUBNET.
 
 
-Onwards to setting some variables.
-
-
-```
-VNET_ID=$(az network vnet show --resource-group rob5z2jh01 --name rob5z2jh01-vnet --query id --output tsv)
-SUBNET_ID=$(az network vnet subnet show --resource-group rob5z2jh01 --vnet-name rob5z2jh01-vnet --name rob5z2jh01-subnet --query id --output tsv)
-```
-
-In both of these cases we set the variable `XXX_ID` to the output of the az command. For example `echo $SUBNET_ID` produces
+Once we have resources we should be able to list them. However this often involves some heirarchy.
+Here we recover the names of both the vnet and the subnet just created:
 
 
 ```
-/subscriptions/c8c8c8c8-0a0a-4a4a-baba-7c7c7c7c7c7c/resourceGroups/rob5z2jh01/providers/Microsoft.Network/virtualNetworks/rob5z2jh01-vnet/subnets/rob5z2jh01-subnet
+az network vnet list --output table
+az network vnet subnet list --resource-group r5-rg --vnet-name r5-vnet --output table
 ```
 
-I now ensured my IAM Role was Owner and ran: 
+
+Onwards to setting some variables: This uses the output of an `az` command to set the `_ID` variables.
 
 
 ```
-SP_PASSWD=$(az ad sp create-for-rbac --name rob5z2jh01-sp --role Contributor --scopes $VNET_ID --query password --output tsv) 
+VNET_ID=$(az network vnet show \
+   --resource-group r5-rg \
+   --name r5-vnet \
+   --query id \
+   --output tsv)
+SUBNET_ID=$(az network vnet subnet show \
+   --resource-group r5-rg \
+   --vnet-name r5-vnet \
+   --name r5-subnet  \
+   --query id \
+   --output tsv)
 ```
 
-This completed with four WARNING messages including one about 'credentials that you must protect'. These credentials are
-the value of the `SP_PASSWD` variable (I presume).
+
+`echo $VAR_NAME` demonstrates that we got it right.
 
 
-To see details of this Service Principal (sp) we have
+Next: Create a 'Service Principal' (an agent who operates on Azure) using Active Directory.
+
 
 ```
-az ad sp list --show-mine
+az ad sp create-for-rbac \
+   --name r5-sp \
+   --role Contributor \
+   --scopes $VNET_ID
 ```
 
-This produces a block of JSON. Copy out the servicePrincipalNames string: `88888888-4444-4444-4444-121212121212` 
-for use setting the `SP_ID` variable below. I will refer to these as 844412 strings.
+
+This gives four key-value pairs including an ID and a PASSWD; so by copy-paste I manually set these:
 
 
-I left and came back later, using these commands to ensure the resources were still in place: 
+```
+SP_ID=<paste value>
+SP_PASSWD=<paste value>
+```
 
+I echoed these values into a file called `next05.sp-info` so that if I lose the information
+in the variable (say when I log out) I can recover it. Notice that this directory is ***not secure***!
+
+
+Check on the Service Principal name: 
+
+
+```
+az ad sp list --show-mine --output table
+```
+
+
+The result is a bit hard to read but the second value should the the Service Principal name. I can use my browser
+zoom to make everything small and fix the wrap format issue for a moment. 
+
+
+At this point we can create the Azure kubernetes service (AKS) cluster.
+
+
+```
+az aks create \
+   --name r5 \
+   --resource-group r5-rg \
+   --ssh-key-value ssh-key-r5.pub \
+   --node-count 3 \
+   --node-vm-size Standard_D2s_v3 \
+   --service-principal $SP_ID \
+   --client-secret $SP_PASSWD \
+   --dns-service-ip 10.0.0.10 \
+   --docker-bridge-address 172.17.0.1/16 \
+   --network-plugin azure \
+   --network-policy azure \
+   --service-cidr 10.0.0.0/16 \
+   --vnet-subnet-id $SUBNET_ID \
+   --output table
+```
+
+This runs for a few minutes. Running as **`Owner`** with no policy restrictions in place on this subscription
+allow this to go smoothly. In the process this creates a new resource group so that now the command
 
 ```
 az group list --output table
-az network vnet list --output table
 ```
 
-`--output table` avoids having to stare at too much JSON. My key files are still present in the subfolder
-I made for this project in the interactive shell. I did re-run the `VNET_ID` and `SUBNET_ID` alias commands out of
-history. 
+returns both `r5-rg` and the new one: `MC_r5-rg_r5_westus`. The name of the new RG is an amalgam of the original resource group
+name and the name of the AKS cluster and the region.
 
 
-Next: 
 
-
-```
-SP_ID=$(az ad sp show --id aaaaaaaa-d2d2-4848-9876-b6a7a7a7a7a7 --query appId --output tsv)
-```
-
-
-This is very unclear: I think the idea is to load in the 844412 string using this `az ad sp` command 
-for the Service Principal but I just pulled it from the JSON earlier. 
-
-
-Now to bring it all together and create the Azure kubernetes service (AKS) cluster.
-
-
-```
-az aks create --name rob5z2jh01-aks-cluster --resource-group rob5z2jh01 --ssh-key-value ssh-key-rob5z2jh01.pub \
-   --node-count 3 --node-vm-size Standard_D2s_v3 --service-principal $SP_ID --client-secret $SP_PASSWD         \
-   --dns-service-ip 10.0.0.10 --docker-bridge-address 172.17.0.1/16 --network-plugin azure                     \
-   --network-policy azure --service-cidr 10.0.0.0/16 --vnet-subnet-id $SUBNET_ID --output table
-```
-
-...and I get a lot of red ink including the phrase `RequestDisallowedByPolicy`. 
-
-
-To make sense of this and fix it we refer to the "process so far". We created a resource group that 
-we find [from this faq](https://docs.microsoft.com/en-us/azure/aks/faq) is one of two needed. This
-first RG. It contains the Kubernetes service resource. 
-
-
-The second RG is created automatically and has a name assigned by default of the form 
-`MC_myResourceGroup_myAKSCluster_westus2`. 
