@@ -81,14 +81,24 @@ Ignore the text printed in the last step; it will not come in to play.
 Notice that `r5` label in the `ssh-keygen` command: That will be the cluster name.
 
 
-Now for a virtual network `vnet` and within that a `subnet`. Use an editor (ctrl-x ctrl-e to open; or use vi) to create the next command.
+Now for a virtual network `vnet` and within that a `subnet`. 
+Use an editor (ctrl-x ctrl-e to open; or use vi) to create a multi-line command.
 
 
 ```
-az network vnet create --resource-group rob5z2jh01 --name rob5z2jh01-vnet --address-prefixes 10.0.0.0/8 --subnet-name rob5z2jh01-subnet --subnet-prefix 10.240.0.0/16
+az network vnet create \
+   --resource-group r5-rg \
+   --name r5-vnet \
+   --address-prefixes 10.0.0.0/8 \
+   --subnet-name r5-subnet \
+   --subnet-prefix 10.240.0.0/16
 ```
 
-Ignoring the JSON text flush; on to setting two ID variables.
+
+I call this file `next01` and run it with `source next01`. It takes a minute and dumps some JSON if it works.
+
+
+Onwards to setting some variables.
 
 
 ```
