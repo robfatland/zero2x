@@ -197,4 +197,51 @@ returns both `r5-rg` and the new one: `MC_r5-rg_r5_westus`. The name of the new 
 name and the name of the AKS cluster and the region.
 
 
+Now we turn to the kubernetes control system `kubectl`: Already installed on the Azure interactive shell. We need
+operating credentials; so `next07.creds` reads: 
+
+
+```
+az aks get-credentials \
+   --name r5 \
+   --resource-group r5-rg \
+   --output table
+```
+
+This operates behind the scenes; the only output is **`Merged "r5" as current context in /home/rob/.kube/config`**.
+There is a config file in the indicated location; just credential data.
+
+
+Now
+
+```
+kubectl get node
+```
+
+lists the three AKS VMs in the nodepool.
+
+
+To list the AKS itself: 
+
+
+```
+az aks list --output table
+```
+
+
+To stop it: 
+
+
+```
+az aks stop --name r5 --resource-group r5-rg
+```
+
+And this takes a couple of minutes. 
+
+
+When we continue it is the `helm` phase so start [here](https://zero-to-jupyterhub.readthedocs.io/en/latest/kubernetes/setup-helm.html)
+
+
+
+
 
