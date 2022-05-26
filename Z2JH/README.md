@@ -242,6 +242,29 @@ And this takes a couple of minutes.
 When we continue it is the `helm` phase so start [here](https://zero-to-jupyterhub.readthedocs.io/en/latest/kubernetes/setup-helm.html)
 
 
+## Install **`helm`**
+
+What the hell is `helm`? Helm is a Kubernetes deployment tool for automating creation, 
+packaging, configuration, and deployment of applications and services to Kubernetes clusters.
+
+
+Like JupyterHub for example. 
+
+
+Fortunately it is already installed on the Azure interactive shell. `helm version` to be convinced.
+
+
+## My variables like `$VNET_ID` are wiped... do I care?
+
+
+I went away and came back. Let's assume I do not need them until we learn otherwise.
+
+
+## Install JupyterHub
+
+- Created comment-full `config.yaml`
+- 
+
 
 
 
