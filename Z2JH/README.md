@@ -263,7 +263,129 @@ I went away and came back. Let's assume I do not need them until we learn otherw
 ## Install JupyterHub
 
 - Created comment-full `config.yaml`
-- 
+- Run the `helm upgrade --install` command: Requires the AKS to be turned ON if it is off
+
+
+
+Output:
+
+```
+Release "jhub" does not exist. Installing it now.
+NAME: jhub
+LAST DEPLOYED: Fri May 27 21:53:36 2022
+NAMESPACE: jhub
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+Thank you for installing JupyterHub!
+Your release is named "jhub" and installed into the namespace "jhub".
+You can check whether the hub and proxy are ready by running:
+ kubectl --namespace=jhub get pod
+and watching for both those pods to be in status 'Running'.
+You can find the public (load-balancer) IP of JupyterHub by running:
+  kubectl -n jhub get svc proxy-public -o jsonpath='{.status.loadBalancer.ingress[].ip}'
+It might take a few minutes for it to appear!
+To get full information about the JupyterHub proxy service run:
+  kubectl --namespace=jhub get svc proxy-public
+If you have questions, please:
+  1. Read the guide at https://z2jh.jupyter.org
+  2. Ask for help or chat to us on https://discourse.jupyter.org/
+  3. If you find a bug please report it at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
+```
+
+Do the last three commands; there we have it.
+
+```
+az network vnet create \
+   --resource-group r5-rg \
+   --name r5-vnet \
+   --address-prefixes 10.0.0.0/8 \
+   --subnet-name r5-subnet \
+   --subnet-prefix 10.240.0.0/16
+
+----------------------------------------
+
+VNET_ID=$(az network vnet show \
+   --resource-group r5-rg \
+   --name r5-vnet \
+   --query id \
+   --output tsv)
+
+----------------------------------------
+
+SUBNET_ID=$(az network vnet subnet show \
+   --resource-group r5-rg \
+   --vnet-name r5-vnet \
+   --name r5-subnet  \
+   --query id \
+   --output tsv)
+
+----------------------------------------
+az ad sp create-for-rbac \
+   --name r5-sp \
+   --role Contributor \
+   --scopes $VNET_ID
+
+----------------------------------------
+
+decea244-f240-4753-8c6d-04e62bbf29d4
+..........password string deleted.........
+
+----------------------------------------
+
+az aks create \
+   --name r5 \
+   --resource-group r5-rg \
+   --ssh-key-value ssh-key-r5.pub \
+   --node-count 3 \
+   --node-vm-size Standard_D2s_v3 \
+   --service-principal $SP_ID \
+   --client-secret $SP_PASSWD \
+   --dns-service-ip 10.0.0.10 \
+   --docker-bridge-address 172.17.0.1/16 \
+   --network-plugin azure \
+   --network-policy azure \
+   --service-cidr 10.0.0.0/16 \
+   --vnet-subnet-id $SUBNET_ID \
+   --output table
+
+----------------------------------------
+
+az aks get-credentials \
+   --name r5 \
+   --resource-group r5-rg \
+   --output table
+
+----------------------------------------
+
+HELM_RELEASE=jhub
+K8S_NAMESPACE=jhub
+HUB_CHART_VERSION=1.2.0
+helm upgrade --cleanup-on-fail \
+  --install $HELM_RELEASE jupyterhub/jupyterhub \
+  --namespace $K8S_NAMESPACE \
+  --create-namespace \
+  --version=$HUB_CHART_VERSION \
+  --values config.yaml
+
+----------------------------------------
+
+K8S_NAMESPACE=jhub
+kubectl config set-context $(kubectl config current-context) --namespace $K8S_NAMESPACE
+
+----------------------------------------
+
+K8S_NAMESPACE=jhub
+kubectl get pod --namespace $K8S_NAMESPACE
+
+----------------------------------------
+
+K8S_NAMESPACE=jhub
+kubectl get service --namespace $K8S_NAMESPACE
+
+```
+
 
 
 
