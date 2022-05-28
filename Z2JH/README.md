@@ -6,7 +6,7 @@ on Azure.
 
 
 
-## The FAQ we would like to find (while learning this)
+## The FAQ
 
 
 - Any supporting links?
@@ -14,24 +14,32 @@ on Azure.
     - Original [ZeroToJupyterHub site](https://zero-to-jupyterhub.readthedocs.io/en/latest/) (can become outdated in some details)
     - An FAQ on the [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/faq) for orchestrating containers
     - [This page (you may already be here)](https://github.com/robfatland/zero2x/edit/master/Z2JH/README.md)
+
+
 - As we proceed with creating many Azure resources: Good naming scheme?
-    - Choose a short base string (I use `r5`)
-    - For each resource: Add a hyphen and brief identifier
+    - I chose a short base string `r5`, then...
+    - ...for each resource: Add a hyphen and short qualifier
     - Example: A resource group and a service principal are respectively `r5-rg` and `r5-sp`
         - (A service principal is an automaton or agent that acts on our behalf on Azure)
-    - Exception: At the end of the process the directions will suggest more generic e.g. `jhub`
+    - Exception: At the end of this build process the directions suggest more generic names e.g. `jhub`
+
+
 - If I am interrupted mid-build: What becomes of my work?
     - Assuming the interactive cloud shell 
     - File system modifications persist (e.g. key pair files) 
     - Cloud resources (RG, vnet, subnet, AKS) persist so **`stop`** the AKS
     - environment variables evaporate
         - If necessary (and it may not be): We can recover those e.g. using `history`
+
+
 - What is care and feeding of a JupyterHub about?
     - Part One: What is the complete "box of toys" including those generated automatically / invisibly
     - Part Two: What is likely to break or need attention in one / three / six / twelve / 24 months?
     - Part Three: When the team wants to install additional...?
         - Python modules (and how do ***environments*** factor in?)
         - Software, from MATLAB to Tableau
+
+
 - What is the Z2JH the high-level breakdown?
     - Set up Kubernetes (K8) plus Helm
         - What is all this `RequestDisallowedByPolicy` business?
@@ -39,26 +47,50 @@ on Azure.
     - Install Jupyter Hub
     - Administrate
     - Pay for it
+
+
 - What will this cost?
     - The Standard_D2s_v3 instance costs $0.11 / hour and we allocate three of them
         - This is not 'elastic': They are all always on unless we stop AKS; then no cost
     - [Here is the AKS cost calculator](https://azure.microsoft.com/en-us/pricing/calculator/?service=kubernetes-service)
     - Bottom line: As configured here (I believe) $256/month running 24/7
     - How many Users does this support?
+
+
 - Should I do Littlest Jupyter Hub or this one?
+
+
 - How do I put the AKS on a Start/Stop timer?
+
+
+- Is a *cluster* a collection of *nodes*?
+
+
+- If Kubernetes is container orchestration, why the extra step to Helm to manage Kubernetes? 
+
+
+- What is a container-centric narrative of what happens here? 
+    - We have some nodes (VMs) where the containers will live (inhabited by human researchers)
+    - We have some sort of persistent storage *away* from the nodes where the home directory of the User is freeze dried when not in use
+    - This implies that the container ***minus*** the home directory always begins an operational session in the same state
+    - ...and this implies that anything *installed* in the OS (outside the home directory) will be gone next time
+
 
 
 ## Notes from following K8 on Azure
 
 
-- Navigate to the Z2JH [AKS instructions](https://zero-to-jupyterhub.readthedocs.io/en/latest/kubernetes/microsoft/step-zero-azure.html)
+- Navigate to the Azure-specific Z2JH [AKS instructions](https://zero-to-jupyterhub.readthedocs.io/en/latest/kubernetes/microsoft/step-zero-azure.html)
 - Login to [Azure](https://portal.azure.com)
-- Choose the correct subscription (filter can obscure this) and verify that's where you are
-- Click the Azure interactive shell icon (upper right) to facilitate using the `az` Azure command line.
-    - Use **Advanced Settings** to create a new Resource Group etc under the correct subscription; be sure to select `bash` 
-    - I will use `r5-rg`, `r5sa`, `r5-fs` for resource group, storage account and file share. '-' not permitted in storage account names, forsooth. 
-- Shell terminal opens but begins madly resizing... oh dear
+- Choose the correct subscription (the default filter can obscure this, unfortunately) and verify you are There
+- Click the Azure interactive shell icon (upper right) to use the `az` Azure command line.
+    - In so doing: Use **Advanced Settings** to create a Resource Group under this subscription; select `bash` 
+    - I name the RG `r5-rg`, the Storage Account `r5sa`, the File Share `r5-fs`
+        - The `-` character is not permitted in storage account names, forsooth. 
+- Shell terminal opens
+
+
+These **`az`** commands illustrate getting readable results by using `--output table`
 
 
 ```
@@ -70,8 +102,10 @@ az account list --refresh --output table
 This should show `True` under `Is Default` for the subscription we choose.
 
 
-Suppose that in starting up the interactive shell we created a resource group. Then we do not need to do that now. 
-On the other hand if we did *not* then *now* is the time to do it; with a name that is aligned with this project.
+Above, when starting up the interactive shell, we created a resource group. Then we do not need to do that now. 
+On the other hand if we did *not* then *now* is the time. Choose a name aligned with this project.
+
+
 
 
 ```
@@ -79,7 +113,13 @@ az group create --name=r5-rg --location=westus --output table
 ```
 
 
-Next let's make a directory with a familiar name, go there, and create an ssh key pair.
+Using the portal interface: The other approach to checking in on the resources and tagging them.
+
+
+Tag the RG.
+
+
+Next make a directory with a familiar name, go there, create an ssh key pair.
 
 
 ```
@@ -90,7 +130,7 @@ ls -al
 ```
 
 
-Ignore the text printed in the last step; it will not come in to play.
+Ignore the text printed in the last step; it will not come into play.
 Notice that `r5` label in the `ssh-keygen` command: That will be the cluster name.
 
 
@@ -108,7 +148,7 @@ az network vnet create \
 ```
 
 
-I call this file `next01` and run it with `source next01`. It takes a minute and dumps some JSON if it works.
+I call this `next01.vnet` and run it with `source next01.vnet`. It takes a minute and dumps some JSON if it works.
 It creates both a VNET and a SUBNET.
 
 
@@ -140,10 +180,18 @@ SUBNET_ID=$(az network vnet subnet show \
 ```
 
 
-`echo $VAR_NAME` demonstrates that we got it right.
+`echo $VAR_NAME` shows we got it right.
 
 
-Next: Create a 'Service Principal' (an agent who operates on Azure) using Active Directory.
+Next: Create a 'Service Principal' (an agent who operates on Azure) using Azure Active Directory.
+Asking the internet to define a Service Principal is a descent into madness because the topic
+is so overloaded with vagueon. vagueon is defined as incomprehensibly vague jargon. For example: 
+
+
+> Service Principals are identities used by created applications, services, and automation tools to access specific resources. 
+
+
+For my purposes, for now, a service principal is some kind of robot with permission to do stuff in my Azure subscription.
 
 
 ```
@@ -154,7 +202,7 @@ az ad sp create-for-rbac \
 ```
 
 
-This gives four key-value pairs including an ID and a PASSWD; so by copy-paste I manually set these:
+This gives four key-value pairs including an ID and a PASSWD; so by copy-paste I manually set two of these:
 
 
 ```
@@ -162,8 +210,12 @@ SP_ID=<paste value>
 SP_PASSWD=<paste value>
 ```
 
+
 I echoed these values into a file called `next05.sp-info` so that if I lose the information
-in the variable (say when I log out) I can recover it. Notice that this directory is ***not secure***!
+in the variable (say when I log out) I can recover it. 
+
+
+> *Notice that this directory is **not secure**!*
 
 
 Check on the Service Principal name: 
