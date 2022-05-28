@@ -1,3 +1,6 @@
+[Home page of this repository](https://github.com/robfatland/zero2x/blob/master/README.md)
+
+
 Let's have some fun building [Jupyter Hub infrastructure](https://zero-to-jupyterhub.readthedocs.io/en/latest/)
 on Azure.
 
@@ -5,39 +8,49 @@ on Azure.
 
 ## The FAQ we would like to find (while learning this)
 
+
 - Any supporting links?
     - [The Naomi Formulation](https://curious-poppyseed-2cf.notion.site/Zero-To-Jupyterhub-Script-83866ee697964443a579d5b3f2500e4b)
     - Original [ZeroToJupyterHub site](https://zero-to-jupyterhub.readthedocs.io/en/latest/) (can become outdated in some details)
     - An FAQ on the [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/faq) for orchestrating containers
-    - [This page](https://github.com/robfatland/zero2x/edit/master/Z2JH/README.md)
+    - [This page (you may already be here)](https://github.com/robfatland/zero2x/edit/master/Z2JH/README.md)
 - As we proceed with creating many Azure resources: Good naming scheme?
-    - choose a short base string (I use `r5`)
-    - For each resource: Add a hyphen and two-character identifier
+    - Choose a short base string (I use `r5`)
+    - For each resource: Add a hyphen and brief identifier
     - Example: A resource group and a service principal are respectively `r5-rg` and `r5-sp`
-        - (A service principal is an automaton)
-- If I am interrupted mid-process: What becomes of my work?
-    - I used the interactive cloud shell 
-    - file system modifications were intact (e.g. key pair files) 
-    - cloud resources (RG, vnet, subnet) were still present
-    - environment variable assignments were lost
-    - commands to recreate them are still available in `history`
-- What is the care and feeding going to look like?
+        - (A service principal is an automaton or agent that acts on our behalf on Azure)
+    - Exception: At the end of the process the directions will suggest more generic e.g. `jhub`
+- If I am interrupted mid-build: What becomes of my work?
+    - Assuming the interactive cloud shell 
+    - File system modifications persist (e.g. key pair files) 
+    - Cloud resources (RG, vnet, subnet, AKS) persist so **`stop`** the AKS
+    - environment variables evaporate
+        - If necessary (and it may not be): We can recover those e.g. using `history`
+- What is care and feeding of a JupyterHub about?
     - Part One: What is the complete "box of toys" including those generated automatically / invisibly
     - Part Two: What is likely to break or need attention in one / three / six / twelve / 24 months?
-    - Part Three: How do we respond when the team wants to install additional...?
+    - Part Three: When the team wants to install additional...?
         - Python modules (and how do ***environments*** factor in?)
         - Software, from MATLAB to Tableau
 - What is the Z2JH the high-level breakdown?
-    - Set up K8 (Kubernetes plus Helm)
-        - Why should I fear the phrase `RequestDisallowedByPolicy`?
-    - Set up Jupyter Hub
+    - Set up Kubernetes (K8) plus Helm
+        - What is all this `RequestDisallowedByPolicy` business?
+            - Answer: It is an exception that blocks the build if we the Azure User are encumbered by some policy
+    - Install Jupyter Hub
     - Administrate
-    - Resources
-- What will this cost? 
+    - Pay for it
+- What will this cost?
+    - The Standard_D2s_v3 instance costs $0.11 / hour and we allocate three of them
+        - This is not 'elastic': They are all always on unless we stop AKS; then no cost
+    - [Here is the AKS cost calculator](https://azure.microsoft.com/en-us/pricing/calculator/?service=kubernetes-service)
+    - Bottom line: As configured here (I believe) $256/month running 24/7
+    - How many Users does this support?
 - Should I do Littlest Jupyter Hub or this one?
+- How do I put the AKS on a Start/Stop timer?
 
 
 ## Notes from following K8 on Azure
+
 
 - Navigate to the Z2JH [AKS instructions](https://zero-to-jupyterhub.readthedocs.io/en/latest/kubernetes/microsoft/step-zero-azure.html)
 - Login to [Azure](https://portal.azure.com)
