@@ -359,9 +359,12 @@ If you have questions, please:
   3. If you find a bug please report it at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
 ```
 
-Do the last three commands; there we have it.
+Run the final three commands; get the public ip address; should yield a working Jupyter notebook server.
+
+Here are all of the files I generated, from `next01.vnet` ...to... `next11.kubectl_get_service`
 
 ```
+01:
 az network vnet create \
    --resource-group r5-rg \
    --name r5-vnet \
@@ -371,6 +374,7 @@ az network vnet create \
 
 ----------------------------------------
 
+02:
 VNET_ID=$(az network vnet show \
    --resource-group r5-rg \
    --name r5-vnet \
@@ -379,6 +383,7 @@ VNET_ID=$(az network vnet show \
 
 ----------------------------------------
 
+03:
 SUBNET_ID=$(az network vnet subnet show \
    --resource-group r5-rg \
    --vnet-name r5-vnet \
@@ -387,6 +392,8 @@ SUBNET_ID=$(az network vnet subnet show \
    --output tsv)
 
 ----------------------------------------
+
+04:
 az ad sp create-for-rbac \
    --name r5-sp \
    --role Contributor \
@@ -394,11 +401,13 @@ az ad sp create-for-rbac \
 
 ----------------------------------------
 
+05 (information, not a script):
 decea244-f240-4753-8c6d-04e62bbf29d4
-..........password string deleted.........
+..........password string redacted.........
 
 ----------------------------------------
 
+06:
 az aks create \
    --name r5 \
    --resource-group r5-rg \
@@ -417,6 +426,7 @@ az aks create \
 
 ----------------------------------------
 
+07:
 az aks get-credentials \
    --name r5 \
    --resource-group r5-rg \
@@ -424,6 +434,7 @@ az aks get-credentials \
 
 ----------------------------------------
 
+08:
 HELM_RELEASE=jhub
 K8S_NAMESPACE=jhub
 HUB_CHART_VERSION=1.2.0
@@ -436,16 +447,19 @@ helm upgrade --cleanup-on-fail \
 
 ----------------------------------------
 
+09:
 K8S_NAMESPACE=jhub
 kubectl config set-context $(kubectl config current-context) --namespace $K8S_NAMESPACE
 
 ----------------------------------------
 
+10:
 K8S_NAMESPACE=jhub
 kubectl get pod --namespace $K8S_NAMESPACE
 
 ----------------------------------------
 
+11:
 K8S_NAMESPACE=jhub
 kubectl get service --namespace $K8S_NAMESPACE
 
