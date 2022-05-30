@@ -327,13 +327,15 @@ Now we proceed to the `helm` phase; [this link in the original documentation](ht
 
 What is `helm`? Helm is a Kubernetes deployment tool for automating creation, 
 packaging, configuration, and deployment of applications and services to Kubernetes clusters.
+Alternative definition: Helm is a package manager for kubernetes, specifically for
+kubernetes clusters. 
 
 
 In our case the 'service' we are deploying is JupyterHub. How to customization? As
 noted above suppose the Users want `imbalanced-learn` pre-installed.
 
 
-`Helm` is already installed on the Azure interactive shell. Run `helm version` to be sure.
+`helm` is already installed on the Azure interactive shell. Run `helm version` to be sure.
 
 
 > ***Note: Shell variables like `VNET_ID` are no longer needed in this procedure.
@@ -341,9 +343,29 @@ noted above suppose the Users want `imbalanced-learn` pre-installed.
 
 ## Install JupyterHub
 
-- Created the comment-full `config.yaml`
-    - oh, this is where that custom `imbalanced-learn` library would come up...
-- Run the `helm upgrade --install` command: Requires the AKS to be turned ON if it is off
+- Created the following `config.yaml` (just a series of comments).
+    - This is where that custom `imbalanced-learn` library will come up...
+
+
+```
+# This file can update the JupyterHub Helm chart's default configuration values.
+#
+# For reference see the configuration reference and default values, but make
+# sure to refer to the Helm chart version of interest to you!
+#
+# Introduction to YAML:     https://www.youtube.com/watch?v=cdLNKUoMc6c
+# Chart config reference:   https://zero-to-jupyterhub.readthedocs.io/en/stable/resources/reference.html
+# Chart default values:     https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/values.yaml
+# Available chart versions: https://jupyterhub.github.io/helm-chart/
+#
+```
+
+
+Procedure: 
+
+
+- Run `helm upgrade --install`
+    - Requires the AKS to be turned ON (if it happens to be OFF)
 
 
 
