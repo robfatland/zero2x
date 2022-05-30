@@ -70,11 +70,18 @@ on Azure.
     - Should I do Littlest Jupyter Hub or this one?
     - How do I put the AKS on a Start/Stop timer?
     - Is a *cluster* a collection of *nodes*?
+        - Sure
+    - How many Users does this JupyterHub support? 
+        - 30 pods per node, 3 nodes: 90 Users... 
+            - But pods have a PVC of 10GB; and the OS disk size is 128GB so does the arithmetic work?
+            - Perhaps we are counting on not having all 90 Users on the system at once.
     - Why use Helm with Kubernetes?
-        - Customization. Helm is the K8 package manager; cf config.yaml below 
+        - Customization. Helm is the K8 package manager; cf `config.yaml` below 
     - https how?
-    - pre-install matplotlib how?
+    - pre-install matplotlib etc how?
         - [Customization](https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/customization.html)
+        - Probably easy: Use a pre-built Docker container
+        - Difficulty unknown: Add more yaml to `config.yaml`
 
 
 
@@ -459,6 +466,15 @@ Who is logged in? Use:
 
 ```
 kubectl get pods
+```
+
+
+Memory capacity of various processes including pods? Pods use Persistent Volume Claims (PVCs) as volumes. 
+The `get pvc` qualifiers show that pods have 10GB Persistent Volumes. 
+
+
+```
+kubectl get pvc
 ```
 
 
