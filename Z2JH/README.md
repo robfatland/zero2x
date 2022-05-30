@@ -323,24 +323,20 @@ Stopping takes a couple of minutes.
 Now we proceed to the `helm` phase; [this link in the original documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/kubernetes/setup-helm.html).
 
 
-## Install **`helm`**
+## Using **`helm`**
 
-What the hell is `helm`? Helm is a Kubernetes deployment tool for automating creation, 
+What is `helm`? Helm is a Kubernetes deployment tool for automating creation, 
 packaging, configuration, and deployment of applications and services to Kubernetes clusters.
 
 
-Like JupyterHub for example. We are particularly interested in customization; supposing
-the Users all want to use `imbalanced-learn`: How do we automate this using helm?
+In our case the 'service' we are deploying is JupyterHub. How to customization? As
+noted above suppose the Users want `imbalanced-learn` pre-installed.
 
 
 `Helm` is already installed on the Azure interactive shell. Run `helm version` to be sure.
 
 
-## My variables like `$VNET_ID` are wiped... do I care?
-
-
-I went away and came back. My ad hoc variables like **`VNET_ID`** are gone. 
-So what? Let's assume nothing from the past is needed to make more progress.
+> ***Note: Shell variables like `VNET_ID` are no longer needed in this procedure.
 
 
 ## Install JupyterHub
