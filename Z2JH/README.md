@@ -13,7 +13,7 @@ on Azure.
     - [The Naomi Formulation](https://curious-poppyseed-2cf.notion.site/Script-draft-1-06700862a4da415b93ab079b24ce24df)
     - Original [ZeroToJupyterHub site](https://zero-to-jupyterhub.readthedocs.io/en/latest/) (can become outdated in some details)
     - An FAQ on the [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/faq) for orchestrating containers
-    - [This page (you may already be here)](https://github.com/robfatland/zero2x/edit/master/Z2JH/README.md)
+    - [This page (you may already be here)](https://github.com/robfatland/zero2x/edit/master/Z2JH/README.md) and a [cheat sheet](https://github.com/robfatland/zero2x/blob/master/Z2JH/redux.md)
     - [Customizing the Jupyter environment](https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/customization.html)
 
 
