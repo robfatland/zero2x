@@ -3,7 +3,7 @@
 Building cloud CI from scratch. X =
 
 
-* JupyterHub
+* [JupyterHub](https://github.com/robfatland/zero2x/tree/master/Z2JH)
 * API (data access)
 * Azure compute
 
