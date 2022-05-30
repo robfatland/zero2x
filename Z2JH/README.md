@@ -58,24 +58,23 @@ on Azure.
     - How many Users does this support?
 
 
-- Should I do Littlest Jupyter Hub or this one?
-
-
-- How do I put the AKS on a Start/Stop timer?
-
-
-- Is a *cluster* a collection of *nodes*?
-
-
-- If Kubernetes is container orchestration, why the extra step to Helm to manage Kubernetes?
-    - Possibly: Helm is talented at configuring the Jupyter environment (customization) 
-
-
 - What is a container-centric narrative of what happens here? 
     - We have some nodes (VMs) where the containers will live (inhabited by human researchers)
     - We have some sort of persistent storage *away* from the nodes where the home directory of the User is freeze dried when not in use
     - This implies that the container ***minus*** the home directory always begins an operational session in the same state
     - ...and this implies that anything *installed* in the OS (outside the home directory) will be gone next time
+
+
+- Unanswered questions remain!
+    - Should I do Littlest Jupyter Hub or this one?
+    - How do I put the AKS on a Start/Stop timer?
+    - Is a *cluster* a collection of *nodes*?
+    - Why use Helm with Kubernetes?
+        - Customization. Helm is the K8 package manager; cf config.yaml below 
+    - https how?
+    - pre-install matplotlib how?
+
+
 
 
 
@@ -361,13 +360,31 @@ noted above suppose the Users want `imbalanced-learn` pre-installed.
 ```
 
 
-Procedure: 
+The following procedural steps create a repo entry in helm's repository table.
 
 
-- Run `helm upgrade --install`
-    - Requires the AKS to be turned ON (if it happens to be OFF)
+```
+helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+helm repo update
+helm repo list
+```
 
 
+The upcoming command `helm upgrade --install jupyterhub (etc)` will reference that repo.
+
+
+```
+HELM_RELEASE=jhub
+K8S_NAMESPACE=jhub
+HUB_CHART_VERSION=1.2.0
+helm upgrade --cleanup-on-fail \
+  --install $HELM_RELEASE jupyterhub/jupyterhub \
+  --namespace $K8S_NAMESPACE \
+  --create-namespace \
+  --version=$HUB_CHART_VERSION \
+  --values config.yaml
+```
+  
 
 Output:
 
@@ -396,9 +413,29 @@ If you have questions, please:
   3. If you find a bug please report it at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
 ```
 
-Run the final three commands; get the public ip address; should yield a working Jupyter notebook server.
+Run the final three `kubectl` commands as follows:
 
-Here are all of the files I generated, from `next01.vnet` ...to... `next11.kubectl_get_service`
+
+```
+kubectl config set-context $(kubectl config current-context) --namespace $K8S_NAMESPACE
+kubectl get pod --namespace $K8S_NAMESPACE
+kubectl get service --namespace $K8S_NAMESPACE
+```
+
+The context referred to is the cluster name `r5`. 
+
+
+Note the public ip address from `get service`. Paste this in a browser address bar; 
+and enter any username. This should yield a working Jupyter notebook server.
+
+
+## Appendix: Script files
+
+
+Here are all of the files I generated, from `next01.vnet` ...to... `next11.kubectl_get_service`.
+Please note: ***These files make it easier to create/fix the more complicated commands. 
+The simpler commands are only given above in the procedural.***
+
 
 ```
 01:
