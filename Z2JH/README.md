@@ -14,6 +14,7 @@ on Azure.
     - Original [ZeroToJupyterHub site](https://zero-to-jupyterhub.readthedocs.io/en/latest/) (can become outdated in some details)
     - An FAQ on the [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/faq) for orchestrating containers
     - [This page (you may already be here)](https://github.com/robfatland/zero2x/edit/master/Z2JH/README.md)
+    - [Customizing the Jupyter environment](https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/customization.html)
 
 
 - As we proceed with creating many Azure resources: Good naming scheme?
@@ -73,6 +74,8 @@ on Azure.
         - Customization. Helm is the K8 package manager; cf config.yaml below 
     - https how?
     - pre-install matplotlib how?
+        - [Customization](https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/customization.html)
+
 
 
 
@@ -370,7 +373,21 @@ helm repo list
 ```
 
 
-The upcoming command `helm upgrade --install jupyterhub (etc)` will reference that repo.
+Of interest (not procedural):
+
+
+```
+helm show values jupyterhub/jupyterhub > tmp_jhub.yaml
+more tmp_jhub.yaml
+```
+
+
+This is a **lot** of information about the deployment. 
+
+
+The following command `helm upgrade --install jupyterhub (etc)` references that jupyterhub repo.
+It also references `config.yaml` which is where we want to stipulate 'install matplotlib and 
+imbalanced-learn'. 
 
 
 ```
@@ -426,7 +443,23 @@ The context referred to is the cluster name `r5`.
 
 
 Note the public ip address from `get service`. Paste this in a browser address bar; 
-and enter any username. This should yield a working Jupyter notebook server.
+and enter any username. This should yield a working Jupyter notebook server **pod**.
+
+
+Using the `jhub` namespace we can check status: 
+
+
+```
+helm status jhub
+```
+
+
+Who is logged in? Use:
+
+
+```
+kubectl get pods
+```
 
 
 ## Appendix: Script files
