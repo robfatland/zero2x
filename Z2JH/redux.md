@@ -1,4 +1,4 @@
-After creating the **`r5-rg`** resource group:
+After creating the **`r5-rg`** resource group; about 21 steps:
 
 ```
 mkdir r5
