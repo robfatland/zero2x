@@ -5,7 +5,7 @@ Building cloud CI from scratch. X =
 
 * [JupyterHub](https://github.com/robfatland/zero2x/tree/master/Z2JH)
 * [API (data access)](https://github.com/robfatland/zero2x/tree/master/Zero2API)
-* Azure compute
+* Azure compute (from MSE544; needs import)
 
 
 ## Zero2JupyterHub
