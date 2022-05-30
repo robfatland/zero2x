@@ -43,7 +43,7 @@ on Azure.
 - What is the Z2JH the high-level breakdown?
     - Set up Kubernetes (K8) plus Helm
         - What is all this `RequestDisallowedByPolicy` business?
-            - Answer: It is an exception that blocks the build if we the Azure User are encumbered by some policy
+            - Answer: It is an exception that blocks the build if we the Azure User are encumbered by a restrictive policy
     - Install Jupyter Hub
     - Administrate
     - Pay for it
@@ -53,7 +53,8 @@ on Azure.
     - The Standard_D2s_v3 instance costs $0.11 / hour and we allocate three of them
         - This is not 'elastic': They are all always on unless we stop AKS; then no cost
     - [Here is the AKS cost calculator](https://azure.microsoft.com/en-us/pricing/calculator/?service=kubernetes-service)
-    - Bottom line: As configured here (I believe) $256/month running 24/7
+    - Bottom line: As configured here (I believe) $256/month running 24/74
+        - Cost should scale with on-time so "work hours" should drop this to about $50 / month
     - How many Users does this support?
 
 
@@ -66,7 +67,8 @@ on Azure.
 - Is a *cluster* a collection of *nodes*?
 
 
-- If Kubernetes is container orchestration, why the extra step to Helm to manage Kubernetes? 
+- If Kubernetes is container orchestration, why the extra step to Helm to manage Kubernetes?
+    - Possibly: Helm is talented at configuring the Jupyter environment (customization) 
 
 
 - What is a container-centric narrative of what happens here? 
@@ -77,20 +79,27 @@ on Azure.
 
 
 
-## Notes from following K8 on Azure
+## Notes from following the 'K8 on Azure' track of Zero To JupyterHub
 
 
 - Navigate to the Azure-specific Z2JH [AKS instructions](https://zero-to-jupyterhub.readthedocs.io/en/latest/kubernetes/microsoft/step-zero-azure.html)
 - Login to [Azure](https://portal.azure.com)
 - Choose the correct subscription (the default filter can obscure this, unfortunately) and verify you are There
-- Click the Azure interactive shell icon (upper right) to use the `az` Azure command line.
-    - In so doing: Use **Advanced Settings** to create a Resource Group under this subscription; select `bash` 
-    - I name the RG `r5-rg`, the Storage Account `r5sa`, the File Share `r5-fs`
-        - The `-` character is not permitted in storage account names, forsooth. 
+- Click the Azure interactive shell icon (upper right `>_` icon) to start the Azure interactive shell.
+    - This is a `bash` shell with the `az` Azure command line interface pre-installed. It runs within your Azure portal window.
+    - However it may start with 'You have no storage mounted' so we need a little sub-procedure to navigate this
+        - Click on **`Show advanced settings`**
+        - Ensure the subscription chosen is correct; as well as the region (in my case `West US`)
+        - Resource group: Create new and provide a short unique identifier. I use `r5-rg`
+        - Storage account: Likewise but it does not support hyphens so I use `r5sa`
+        - File share: Likewise; I use `r5fs`
+        - Click `Create storage` 
 - Shell terminal opens
 
 
-These **`az`** commands illustrate getting readable results by using `--output table`
+These **`az`** commands illustrate getting readable results by using `--output table`. Enter them if you
+are interested in seeing what is going on. They are not part of the build procedure. For example the 
+`az account set` command should be extraneous because you have already selected the correct subscription above.
 
 
 ```
@@ -103,7 +112,8 @@ This should show `True` under `Is Default` for the subscription we choose.
 
 
 Above, when starting up the interactive shell, we created a resource group. Then we do not need to do that now. 
-On the other hand if we did *not* then *now* is the time. Choose a name aligned with this project.
+On the other hand if we did *not* do so before:  *Now* is the time. Choose a name aligned with this project. Note the
+**region** designation is **`westus`** so use this consistently to keep all resource in the same data center.
 
 
 
@@ -116,7 +126,7 @@ az group create --name=r5-rg --location=westus --output table
 Using the portal interface: The other approach to checking in on the resources and tagging them.
 
 
-Tag the RG.
+Tag the RG. This is done in the portal by selecting it and clicking the `edit` hyperlink after **Tags**.
 
 
 Next make a directory with a familiar name, go there, create an ssh key pair.
@@ -130,8 +140,9 @@ ls -al
 ```
 
 
-Ignore the text printed in the last step; it will not come into play.
-Notice that `r5` label in the `ssh-keygen` command: That will be the cluster name.
+No passphrase is needed; and ignore the text printed as output as it will not come into play.
+Notice that `r5` label in the `ssh-keygen` command: That will be the cluster name. There should
+now be two ssh key files present. 
 
 
 Now for a virtual network `vnet` and within that a `subnet`. 
@@ -180,7 +191,7 @@ SUBNET_ID=$(az network vnet subnet show \
 ```
 
 
-`echo $VAR_NAME` shows we got it right.
+`echo $VAR_NAME` shows we got it right. The long hyphenated hexadecimal string is the subscription ID.
 
 
 Next: Create a 'Service Principal' (an agent who operates on Azure) using Azure Active Directory.
@@ -202,7 +213,7 @@ az ad sp create-for-rbac \
 ```
 
 
-This gives four key-value pairs including an ID and a PASSWD; so by copy-paste I manually set two of these:
+This gives four key-value pairs including an ID and a PASSWD. Using copy-paste I manually save two of these as temporary variables:
 
 
 ```
@@ -226,11 +237,13 @@ az ad sp list --show-mine --output table
 ```
 
 
-The result is a bit hard to read but the second value should the the Service Principal name. I can use my browser
-zoom to make everything small and fix the wrap format issue for a moment. 
+The DisplayName column should show the Service Principal you just created.
 
 
-At this point we can create the Azure kubernetes service (AKS) cluster.
+Now to create the Azure kubernetes service (AKS) cluster. Notice that this uses 
+three variables we set above: **`SP_ID`**, **`SP_PASSWD`**, and **`SUBNET_ID`**.
+The instance type and count for the cluster nodes is given (3) and some other
+arcane things are included as well. 
 
 
 ```
@@ -313,21 +326,24 @@ What the hell is `helm`? Helm is a Kubernetes deployment tool for automating cre
 packaging, configuration, and deployment of applications and services to Kubernetes clusters.
 
 
-Like JupyterHub for example. 
+Like JupyterHub for example. We are particularly interested in customization; supposing
+the Users all want to use `imbalanced-learn`: How do we automate this using helm?
 
 
-Fortunately it is already installed on the Azure interactive shell. `helm version` to be convinced.
+`Helm` is already installed on the Azure interactive shell. Run `helm version` to be sure.
 
 
 ## My variables like `$VNET_ID` are wiped... do I care?
 
 
-I went away and came back. Let's assume I do not need them until we learn otherwise.
+I went away and came back. My ad hoc variables like **`VNET_ID`** are gone. 
+So what? Let's assume nothing from the past is needed to make more progress.
 
 
 ## Install JupyterHub
 
-- Created comment-full `config.yaml`
+- Created the comment-full `config.yaml`
+    - oh, this is where that custom `imbalanced-learn` library would come up...
 - Run the `helm upgrade --install` command: Requires the AKS to be turned ON if it is off
 
 
