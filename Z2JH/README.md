@@ -264,19 +264,20 @@ az aks create \
    --output table
 ```
 
-This runs for a few minutes. Running as **`Owner`** with no policy restrictions in place on this subscription
-allow this to go smoothly. In the process this creates a new resource group so that now the command
+This runs for a few minutes. Run as **`Owner`** with no policy restrictions in place on this subscription
+and it should go smoothly. This procedure creates a new resource group. Verify by issuing:
 
 ```
 az group list --output table
 ```
 
-returns both `r5-rg` and the new one: `MC_r5-rg_r5_westus`. The name of the new RG is an amalgam of the original resource group
-name and the name of the AKS cluster and the region.
+This returns both `r5-rg` and `MC_r5-rg_r5_westus`. The name of this new RG is an amalgam of the original 
+resource group name, the name of the AKS cluster and the region.
 
 
-Now we turn to the kubernetes control system `kubectl`: Already installed on the Azure interactive shell. We need
-operating credentials; so `next07.creds` reads: 
+Now we are done with the variables we have set to this point. We now turn to the kubernetes control system `kubectl`
+and the `helm` configuration manager. Both are already installed on the Azure interactive shell. We need
+operating credentials; so run a second `az aks` command:
 
 
 ```
@@ -287,19 +288,20 @@ az aks get-credentials \
 ```
 
 This operates behind the scenes; the only output is **`Merged "r5" as current context in /home/rob/.kube/config`**.
-There is a config file in the indicated location; just credential data.
+This step creates a config file in the indicated location.  This is credential data.
 
 
-Now
+Now run (for interest only):
 
 ```
 kubectl get node
 ```
 
-lists the three AKS VMs in the nodepool.
+This lists the three AKS VMs in the nodepool for our interest/confirmation. The **`AKS`** service should also be 
+visible within this RG on the portal. 
 
 
-To list the AKS itself: 
+To list the AKS from the command line: 
 
 
 ```
@@ -307,17 +309,18 @@ az aks list --output table
 ```
 
 
-To stop it: 
+While the AKS is running ot costs money. To continue the JupyterHub build: Keep going. 
+To stop the AKS temporarily use:
 
 
 ```
 az aks stop --name r5 --resource-group r5-rg
 ```
 
-And this takes a couple of minutes. 
+Stopping takes a couple of minutes. 
 
 
-When we continue it is the `helm` phase so start [here](https://zero-to-jupyterhub.readthedocs.io/en/latest/kubernetes/setup-helm.html)
+Now we proceed to the `helm` phase; [this link in the original documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/kubernetes/setup-helm.html).
 
 
 ## Install **`helm`**
