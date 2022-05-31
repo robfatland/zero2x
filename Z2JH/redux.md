@@ -31,6 +31,10 @@ Using cut-and-paste:
 SP_ID=<paste value>
 SP_PASSWD=<paste value>
 
+
+
+echo $SP_ID > ~/.sp_details
+echo $SP_PASSWD >> ~/.sp_details
 az aks create \
    --name r5 \
    --resource-group r5-rg \
@@ -77,5 +81,10 @@ helm upgrade --cleanup-on-fail \
   --values config.yaml
 kubectl config set-context $(kubectl config current-context) --namespace $K8S_NAMESPACE
 kubectl get pod --namespace $K8S_NAMESPACE
+kubectl get service --namespace $K8S_NAMESPACE
+
+
+This last command will need to be repeated until the "pending" turns into a real URL:
+
 kubectl get service --namespace $K8S_NAMESPACE
 ```
