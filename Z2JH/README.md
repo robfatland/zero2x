@@ -369,6 +369,16 @@ noted above suppose the Users want `imbalanced-learn` pre-installed.
 #
 ```
 
+Don't do anything with this, it is just a placeholder for `config.yaml` content. 
+
+
+```
+singleuser:
+  image:
+    name: jupyter/datascience-notebook
+    tag: latest
+```
+
 
 The following procedural steps create a repo entry in helm's repository table.
 
@@ -475,6 +485,18 @@ The `get pvc` qualifiers show that pods have 10GB Persistent Volumes.
 
 ```
 kubectl get pvc
+```
+
+
+Suppose that we modified the container; and the `config.yaml`; how to rebuild? This: 
+
+
+```
+helm upgrade --cleanup-on-fail \
+  $HELM_RELEASE jupyterhub/jupyterhub \
+  --namespace $K8S_NAMESPACE \
+  --version=$HUB_CHART_VERSION \
+  --values config.yaml
 ```
 
 
