@@ -2,7 +2,9 @@
 2. Start the interactive shell; at which point define a resource group called **`$BASE-rg`**
 3. In the home directory create a `config.yaml` file for use by **`helm`**. 
 
-Simplest is an empty file; or see the full notes for the 'dummy file with comments'; or one can be ambitious and use
+Simplest is an empty file; or see the full notes for the 'dummy file with comments'. To get a 
+Jupyter environment pre-configured for data science use this for `config.yaml`:
+
 
 ```
 singleuser:
@@ -11,7 +13,9 @@ singleuser:
     tag: latest
 ```
 
+
 4. Run this script from the home directory 
+
 
 ```
 BASE=r5
@@ -43,12 +47,15 @@ az ad sp create-for-rbac \
 
 5. From the last output above copy and past two variables:
 
+
 ```
 SP_ID=<paste value>
 SP_PASSWD=<paste value>
 ```
 
+
 6. Run this script
+
 
 ```
 echo $SP_ID > ~/.sp_details
@@ -86,15 +93,18 @@ helm upgrade --cleanup-on-fail \
   --values config.yaml
 kubectl config set-context $(kubectl config current-context) --namespace $K8S_NAMESPACE
 kubectl get pod --namespace $K8S_NAMESPACE
+sleep 20
 kubectl get service --namespace $K8S_NAMESPACE
 ```
 
 
-7. The final command `kubectl get service` will initially give a public URL as "pending". Wait a bit and re-issue:
+7. The final command `kubectl get service` initially gives a public URL as "pending". 
+This inspired waiting 20 seconds beforehand: To give the ip address a chance to resolve. 
+If you see "pending": Wait a minute and re-issue this command:
 
 
 ```
 kubectl get service --namespace $K8S_NAMESPACE
 ```
 
-8. Once it appears: Paste that URL into a browser.
+8. Once the ip address appears: Paste that URL into a browser.
