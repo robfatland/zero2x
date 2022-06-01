@@ -1,18 +1,32 @@
-After creating the **`r5-rg`** resource group; about 21 steps:
+1. Decide upon a base resource string. I use `r5`. Substitute this in the first line of the script.
+2. Start the interactive shell; at which point define a resource group called **`$BASE-rg`**
+3. In the home directory create a `config.yaml` file for use by **`helm`**. 
+
+Simplest is an empty file; or see the full notes for the 'dummy file with comments'; or one can be ambitious and use
 
 ```
-mkdir r5
-cd r5
-ssh-keygen -f ssh-key-r5
+singleuser:
+  image:
+    name: jupyter/datascience-notebook
+    tag: latest
+```
+
+4. Run this script from the home directory 
+
+```
+BASE=r5
+mkdir $BASE
+cd $BASE
+ssh-keygen -f ssh-key-$BASE
 az network vnet create \
-   --resource-group r5-rg \
-   --name r5-vnet \
+   --resource-group $BASE-rg \
+   --name $BASE-vnet \
    --address-prefixes 10.0.0.0/8 \
-   --subnet-name r5-subnet \
+   --subnet-name $BASE-subnet \
    --subnet-prefix 10.240.0.0/16
 VNET_ID=$(az network vnet show \
-   --resource-group r5-rg \
-   --name r5-vnet \
+   --resource-group $BASE-rg \
+   --name $BASE-vnet \
    --query id \
    --output tsv)
 SUBNET_ID=$(az network vnet subnet show \
@@ -25,14 +39,18 @@ az ad sp create-for-rbac \
    --name r5-sp \
    --role Contributor \
    --scopes $VNET_ID
+```
 
-Using cut-and-paste:
+5. From the last output above copy and past two variables:
 
+```
 SP_ID=<paste value>
 SP_PASSWD=<paste value>
+```
 
+6. Run this script
 
-
+```
 echo $SP_ID > ~/.sp_details
 echo $SP_PASSWD >> ~/.sp_details
 az aks create \
@@ -54,20 +72,7 @@ az aks get-credentials \
    --name r5 \
    --resource-group r5-rg \
    --output table
-
-Edit config.yaml to be: 
-
-# This file can update the JupyterHub Helm chart's default configuration values.
-#
-# For reference see the configuration reference and default values, but make
-# sure to refer to the Helm chart version of interest to you!
-#
-# Introduction to YAML:     https://www.youtube.com/watch?v=cdLNKUoMc6c
-# Chart config reference:   https://zero-to-jupyterhub.readthedocs.io/en/stable/resources/reference.html
-# Chart default values:     https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/values.yaml
-# Available chart versions: https://jupyterhub.github.io/helm-chart/
-#
-
+cp ../config.yaml .
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
 helm repo update
 HELM_RELEASE=jhub
@@ -82,9 +87,14 @@ helm upgrade --cleanup-on-fail \
 kubectl config set-context $(kubectl config current-context) --namespace $K8S_NAMESPACE
 kubectl get pod --namespace $K8S_NAMESPACE
 kubectl get service --namespace $K8S_NAMESPACE
+```
 
 
-This last command will need to be repeated until the "pending" turns into a real URL:
+7. The final command `kubectl get service` will initially give a public URL as "pending". Wait a bit and re-issue:
 
+
+```
 kubectl get service --namespace $K8S_NAMESPACE
 ```
+
+8. Once it appears: Paste that URL into a browser.
