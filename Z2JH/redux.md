@@ -30,13 +30,13 @@ VNET_ID=$(az network vnet show \
    --query id \
    --output tsv)
 SUBNET_ID=$(az network vnet subnet show \
-   --resource-group r5-rg \
-   --vnet-name r5-vnet \
-   --name r5-subnet  \
+   --resource-group $BASE-rg \
+   --vnet-name $BASE-vnet \
+   --name $BASE-subnet  \
    --query id \
    --output tsv)
 az ad sp create-for-rbac \
-   --name r5-sp \
+   --name $BASE-sp \
    --role Contributor \
    --scopes $VNET_ID
 ```
@@ -54,9 +54,9 @@ SP_PASSWD=<paste value>
 echo $SP_ID > ~/.sp_details
 echo $SP_PASSWD >> ~/.sp_details
 az aks create \
-   --name r5 \
-   --resource-group r5-rg \
-   --ssh-key-value ssh-key-r5.pub \
+   --name $BASE \
+   --resource-group $BASE-rg \
+   --ssh-key-value ssh-key-$BASE.pub \
    --node-count 3 \
    --node-vm-size Standard_D2s_v3 \
    --service-principal $SP_ID \
@@ -69,8 +69,8 @@ az aks create \
    --vnet-subnet-id $SUBNET_ID \
    --output table
 az aks get-credentials \
-   --name r5 \
-   --resource-group r5-rg \
+   --name $BASE \
+   --resource-group $BASE-rg \
    --output table
 cp ../config.yaml .
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
