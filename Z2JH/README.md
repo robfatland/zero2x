@@ -22,18 +22,19 @@ on the Azure cloud.
 
 - What is a good scheme for naming the many Azure resources and services called into play here?
     - Choose a (short, simple) base string; and use that to name everything
-    - I use **`r5`**. In fact on the `bash` shell I define `BASE=r5` and then use $BASE
-    - This is shown very clearly on the [accelerator cheat sheet](https://github.com/robfatland/zero2x/blob/master/Z2JH/redux.md)
-    - Example: My initial resource group is called `r5-rg`
+    - I use **`r5`**: In the `bash` shell I define `BASE=r5` and then use $BASE
+        - This is shown on the [accelerator cheat sheet](https://github.com/robfatland/zero2x/blob/master/Z2JH/redux.md)
+    - Example: My starting resource group is `r5-rg`
  
 
 - If I am interrupted mid-build: What becomes of my work?
-    - Assuming you use the Azure portal's built-in interactive cloud shell... 
+    - Assuming I use the Azure portal's built-in interactive cloud shell... 
         - File system modifications persist (e.g. key pair files) 
-        - Cloud resources (RG, vnet, subnet, AKS) persist; so **`stop`** the AKS; do not **`delete`** it
+        - Cloud resources (RG, vnet, subnet, AKS) persist
+            - So to save $: **`stop`** the AKS; do not **`delete`** the AKS
     - environment variables evaporate
-        - As you build: Save the create commands in a file for future reference
-        - Alternative: We can recover variable declarations by inspecting `history`
+        - As we build: Save the create commands in a file for future reference
+        - Alternative: Recover variable declarations from `history`
 
 
 - No answers yet for: What is care and feeding of a JupyterHub about?
@@ -44,12 +45,12 @@ on the Azure cloud.
         - Software, from MATLAB to Tableau
 
 
-- What is a high-level breakdown of Zero To JupyterHub?
-    - There is a core procedure that generates a very generic system; and then there is fine tuning
-    - Generic build
-        - Create an Azure Active Director **Service Principal** to act as our agent on Azure
-        - Create an Azure Kubernetes Service instance to manage a cluster of 3 small VMs
-        - and so on 
+- What is a high-level breakdown of the JupyterHub build?
+    - There is a core procedure to build a generic system; and then there is fine tuning details
+        - Generic build
+            - Create a private 
+            - Create an Azure Active Director **Service Principal** (acts like a friend bot)
+            - Create an Azure Kubernetes Service (AKS) instance: manages a 3 VM cluster
     - Fine tuning
         - Customize the environment via a 'template' Docker image
         - Add user authentication access
