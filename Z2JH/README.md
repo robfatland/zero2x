@@ -48,21 +48,24 @@ on the Azure cloud.
 - What is a high-level breakdown of the JupyterHub build?
     - There is a core procedure to build a generic system; and then there is fine tuning details
         - Generic build
-            - Create a private 
-            - Create an Azure Active Director **Service Principal** (acts like a friend bot)
+            - Create a private network 
+            - Create an Azure Active Director **Service Principal** (acts like a friendly bot)
             - Create an Azure Kubernetes Service (AKS) instance: manages a 3 VM cluster
-    - Fine tuning
-        - Customize the environment via a 'template' Docker image
-        - Add user authentication access
-        - Automate work day On / Off of the Jupyter Hub
-        - Allow users to turn the Jupyter Hub On / Off on off hours
-        - Pay for the system monthly
-    - Set up Kubernetes (K8) plus Helm
-        - What is all this `RequestDisallowedByPolicy` business?
-            - Answer: It is an exception that blocks the build if we the Azure User are encumbered by a restrictive policy
+            - Use helm to install JupyterHub and provide a connection ip address
+        - Fine tuning (not covered in these notes)
+            - Customize the environment via a 'template' Docker image
+            - Add user authentication access
+            - Automate AKS to only be ON during weekday working hours
+            - Enable users to turn the Jupyter Hub ON / OFF at other times
+            - Associate a DNS entry with the JupyterHub service
+            - Pay for the system monthly
 
 
-left off here
+Are there any gotchas?
+    - Formatting commands is fraught with peril: An extra space here, a single hyphen when it should be double...
+    - AKS Create fails with `RequestDisallowedByPolicy`: Some kind of restrictive policy must be voided
+    - The generic install has absolutely no security around who can log in; so this is a key missing piece
+    - Instructions given here are valid on 1-JUN-2022 but have a half-life as the Azure cloud evolves over time
 
 
 - What will this cost?
