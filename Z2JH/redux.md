@@ -1,10 +1,6 @@
-1. Decide upon a base resource string. I use `r5`. Substitute this in the first line of the script.
-2. Start the interactive shell; at which point define a resource group called **`$BASE-rg`**
-3. In the home directory create a `config.yaml` file for use by **`helm`**. 
-
-Simplest is an empty file; or see the full notes for the 'dummy file with comments'. To get a 
-Jupyter environment pre-configured for data science use this for `config.yaml`:
-
+1. Decide upon a **`BASE`** resource name; a short relevant string. I use `r5`. 
+2. Start the interactive shell; in so doing create an RG called **`$BASE-rg`**
+3. In **`~`** create `config.yaml` that looks as follows: 
 
 ```
 singleuser:
@@ -13,8 +9,7 @@ singleuser:
     tag: latest
 ```
 
-
-4. Run this script from the home directory 
+4. Create a script as follows, taking care to substitute *your* base string for `r5` in line 1.
 
 
 ```
@@ -45,16 +40,16 @@ az ad sp create-for-rbac \
    --scopes $VNET_ID
 ```
 
-5. From the last output above copy and past two variables:
+5. From the last four lines of output text: Copy and past to set two variables:
 
 
 ```
-SP_ID=<paste value>
-SP_PASSWD=<paste value>
+SP_ID=<paste value from above>
+SP_PASSWD=<paste value from above>
 ```
 
 
-6. Run this script
+6. Create and run the script that follows:
 
 
 ```
@@ -98,13 +93,12 @@ kubectl get service --namespace $K8S_NAMESPACE
 ```
 
 
-7. The final command `kubectl get service` initially gives a public URL as "pending". 
-This inspired waiting 20 seconds beforehand: To give the ip address a chance to resolve. 
-If you see "pending": Wait a minute and re-issue this command:
+7. If the final output gives a public URL as "pending": You will have to re-run the
+final command after a brief pause:
 
 
 ```
 kubectl get service --namespace $K8S_NAMESPACE
 ```
 
-8. Once the ip address appears: Paste that URL into a browser.
+8. Once the ip address appears in the output: Paste that URL into a browser.
