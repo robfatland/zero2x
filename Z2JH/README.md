@@ -1,39 +1,42 @@
-[Home page of this repository](https://github.com/robfatland/zero2x/blob/master/README.md)
+[Home](https://github.com/robfatland/zero2x/blob/master/README.md)
 
 
-Let's have some fun building [Jupyter Hub infrastructure](https://zero-to-jupyterhub.readthedocs.io/en/latest/)
-on Azure.
+Let's build [Jupyter Hub infrastructure](https://zero-to-jupyterhub.readthedocs.io/en/latest/)
+on the Azure cloud.
 
 
 
-## The FAQ
+## My FAQ
 
 
-- Any supporting links?
-    - [The Naomi Formulation](https://curious-poppyseed-2cf.notion.site/Script-draft-1-06700862a4da415b93ab079b24ce24df)
-    - Original [ZeroToJupyterHub site](https://zero-to-jupyterhub.readthedocs.io/en/latest/) (can become outdated in some details)
-    - An FAQ on the [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/faq) for orchestrating containers
-    - [This page (you may already be here)](https://github.com/robfatland/zero2x/edit/master/Z2JH/README.md) and a [cheat sheet](https://github.com/robfatland/zero2x/blob/master/Z2JH/redux.md)
+- Related links?
+    - [Naomi's instructions](https://curious-poppyseed-2cf.notion.site/Script-draft-1-06700862a4da415b93ab079b24ce24df) are directional (get it done) whereas this here is 'notes'.
+    - The original [ZeroToJupyterHub site](https://zero-to-jupyterhub.readthedocs.io/en/latest/) (can become outdated in some details)
+    - An FAQ on the [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/faq), the Azure service at the center of this procedure.
+    - [This page](https://github.com/robfatland/zero2x/edit/master/Z2JH/README.md) and my [accelerator cheat sheet](https://github.com/robfatland/zero2x/blob/master/Z2JH/redux.md). 
+        - After some practice I can build a data science Jupyter Hub in 10 minutes using the cheat sheet.
     - [Customizing the Jupyter environment](https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/customization.html)
+        - This is all about building, storing and invoking a custom Docker image that has desired whistles and bells
+    
 
 
-- As we proceed with creating many Azure resources: Good naming scheme?
-    - I chose a short base string `r5`, then...
-    - ...for each resource: Add a hyphen and short qualifier
-    - Example: A resource group and a service principal are respectively `r5-rg` and `r5-sp`
-        - (A service principal is an automaton or agent that acts on our behalf on Azure)
-    - Exception: At the end of this build process the directions suggest more generic names e.g. `jhub`
-
+- What is a good scheme for naming the many Azure resources and services called into play here?
+    - Choose a (short, simple) base string; and use that to name everything
+    - I use **`r5`**. In fact on the `bash` shell I define `BASE=r5` and then use $BASE
+    - This is shown very clearly on the [accelerator cheat sheet](https://github.com/robfatland/zero2x/blob/master/Z2JH/redux.md)
+    - Example: My initial resource group is called `r5-rg`
+ 
 
 - If I am interrupted mid-build: What becomes of my work?
-    - Assuming the interactive cloud shell 
-    - File system modifications persist (e.g. key pair files) 
-    - Cloud resources (RG, vnet, subnet, AKS) persist so **`stop`** the AKS
+    - Assuming you use the Azure portal's built-in interactive cloud shell... 
+        - File system modifications persist (e.g. key pair files) 
+        - Cloud resources (RG, vnet, subnet, AKS) persist; so **`stop`** the AKS; do not **`delete`** it
     - environment variables evaporate
-        - If necessary (and it may not be): We can recover those e.g. using `history`
+        - As you build: Save the create commands in a file for future reference
+        - Alternative: We can recover variable declarations by inspecting `history`
 
 
-- What is care and feeding of a JupyterHub about?
+- No answers yet for: What is care and feeding of a JupyterHub about?
     - Part One: What is the complete "box of toys" including those generated automatically / invisibly
     - Part Two: What is likely to break or need attention in one / three / six / twelve / 24 months?
     - Part Three: When the team wants to install additional...?
@@ -41,13 +44,24 @@ on Azure.
         - Software, from MATLAB to Tableau
 
 
-- What is the Z2JH the high-level breakdown?
+- What is a high-level breakdown of Zero To JupyterHub?
+    - There is a core procedure that generates a very generic system; and then there is fine tuning
+    - Generic build
+        - Create an Azure Active Director **Service Principal** to act as our agent on Azure
+        - Create an Azure Kubernetes Service instance to manage a cluster of 3 small VMs
+        - and so on 
+    - Fine tuning
+        - Customize the environment via a 'template' Docker image
+        - Add user authentication access
+        - Automate work day On / Off of the Jupyter Hub
+        - Allow users to turn the Jupyter Hub On / Off on off hours
+        - Pay for the system monthly
     - Set up Kubernetes (K8) plus Helm
         - What is all this `RequestDisallowedByPolicy` business?
             - Answer: It is an exception that blocks the build if we the Azure User are encumbered by a restrictive policy
-    - Install Jupyter Hub
-    - Administrate
-    - Pay for it
+
+
+left off here
 
 
 - What will this cost?
