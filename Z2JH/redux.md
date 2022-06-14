@@ -49,7 +49,7 @@ SP_PASSWD=<paste value from above>
 ```
 
 
-6. Create and run the script that follows:
+6. Create and run the script below. You do this *in* the directory created above, $BASE. You should not have to change directories to do this.
 
 
 ```
