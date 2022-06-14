@@ -9,7 +9,7 @@ singleuser:
     tag: latest
 ```
 
-4. Create a script as follows, taking care to substitute *your* base string for `r5` in line 1.
+4. Create a script as follows, taking care to substitute *your* base string for `r5` in line 1... oh, and then run it.
 
 
 ```
