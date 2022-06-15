@@ -101,4 +101,39 @@ final command after a brief pause:
 kubectl get service --namespace $K8S_NAMESPACE
 ```
 
-8. Once the ip address appears in the output: Paste that URL into a browser.
+8. Once the ip address appears in the output: Paste that URL into a browser. Any login combination will work: There is no authentication yet.
+
+
+
+> Note: The auto-generated RG has a public ip address as one of its resources. We can click on this and
+> in turn find that it does indeed have an ip address; but it is not useful. It is not the same
+> as the ip address referred to above. Use the one above to connect to the Jupyter Hub. 
+
+## Adding in additional features
+
+
+### DNS entry through authentication
+
+
+Following the narrative on [this documentation page](https://docs.microsoft.com/en-us/azure/aks/static-ip#apply-a-dns-label-to-the-service).
+
+
+Find the public ip address in the automatically-generated RG **`MC_r5-rg_r5_westus`**.
+Replace the ip address ***name*** in the following command with its name (not an actual ip address).
+Make sure the resource-group name is correct.
+
+
+```
+az network public-ip create \
+    --resource-group MC_r5-rg_r5_westus \
+    --name some-hex-8-4-4-12-name \
+    --sku Standard \
+    --allocation-method static
+```
+
+
+The output is some descriptive JSON. 
+
+
+
+
