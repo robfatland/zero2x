@@ -105,9 +105,12 @@ kubectl get service --namespace $K8S_NAMESPACE
 
 
 
-> Note: The auto-generated RG has a public ip address as one of its resources. We can click on this and
-> in turn find that it does indeed have an ip address; but it is not useful. It is not the same
-> as the ip address referred to above. Use the one above to connect to the Jupyter Hub. 
+> **Heads Up***: In the portal navigate to the auto-generated RG; with a name like **`MC_r5-rg_r5_westus`**.
+> This contains two public ip addresses in its resource list. The one that looks like **`kubernetes-a47382...etcetera...`**
+> is the one associated with the Jupyter Hub service. Open this resource and the ip address shown should match that provided in 
+> step 8 above. Note that this public ip address has a **name** which is just that**`kubernetes-a47382...etcetera...`**
+> string. Both this name and the name of the auto-generated resource group are used in the next step.
+
 
 ## Adding in additional features
 
@@ -118,15 +121,14 @@ kubectl get service --namespace $K8S_NAMESPACE
 Following the narrative on [this documentation page](https://docs.microsoft.com/en-us/azure/aks/static-ip#apply-a-dns-label-to-the-service).
 
 
-Find the public ip address in the automatically-generated RG **`MC_r5-rg_r5_westus`**.
-Replace the ip address ***name*** in the following command with its name (not an actual ip address).
-Make sure the resource-group name is correct.
+Find the **`kubernetes-etc`** public ip address within the automatically-generated RG that has a name like **`MC_r5-rg_r5_westus`**.
+Place this RG name and the ip address ***name*** into the following command. 
 
 
 ```
 az network public-ip create \
     --resource-group MC_r5-rg_r5_westus \
-    --name some-hex-8-4-4-12-name \
+    --name kubernetes-aaaaaaaabbbbbbbbccccccccdddddddd \
     --sku Standard \
     --allocation-method static
 ```
