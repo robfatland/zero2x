@@ -106,6 +106,7 @@ kubectl get service --namespace $K8S_NAMESPACE
 
 
 > **Heads Up***: In the portal navigate to the auto-generated RG; with a name like **`MC_r5-rg_r5_westus`**.
+> This is called the **node** resource group.
 > This contains two public ip addresses in its resource list. The one that looks like **`kubernetes-a47382...etcetera...`**
 > is the one associated with the Jupyter Hub service. Open this resource and the ip address shown should match that provided in 
 > step 8 above. Note that this public ip address has a **name** which is just that**`kubernetes-a47382...etcetera...`**
