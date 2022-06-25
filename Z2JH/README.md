@@ -1,5 +1,6 @@
 [Home](https://github.com/robfatland/zero2x/blob/master/README.md)
 
+$e^{i \pi} + 1 = 42$
 
 Let's build [Jupyter Hub infrastructure](https://zero-to-jupyterhub.readthedocs.io/en/latest/)
 on the Azure cloud.
