@@ -1,6 +1,6 @@
 [Home](https://github.com/robfatland/zero2x/blob/master/README.md)
 
-$\rho^{i}\ohr$
+$\rho^{i}\reflectbox{\rho}$
 
 Let's build [Jupyter Hub infrastructure](https://zero-to-jupyterhub.readthedocs.io/en/latest/)
 on the Azure cloud.
