@@ -1,3 +1,25 @@
+\documentclass{article}
+\usepackage{amsmath,graphicx}
+\usepackage{unicode-math}
+\setmathfont{Lucida Bright Math OT}
+
+\DeclareRobustCommand{\ammaG}{\text{\reflectbox{$\Gamma$}}}
+
+\begin{document}
+
+$\Gamma\ne\ammaG$
+
+$\Gamma=\Gamma$
+
+$\ammaG_{\ammaG_\ammaG}$
+
+\end{document}
+
+
+
+
+
+
 [Home](https://github.com/robfatland/zero2x/blob/master/README.md)
 
 $\rho^{i}\reflect{\rho}$
