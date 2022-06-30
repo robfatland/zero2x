@@ -626,6 +626,153 @@ kubectl get service --namespace $K8S_NAMESPACE
 ```
 
 
+## Appendix 2 Debugging issue
 
+
+We saw an issue come up; I'm copying the dialog towards eventually capturing this in the procedural notes.
+
+
+Learner writes:
+
+
+```
+...trying to finish up the DNS, HTTPs, and auth steps. I successfully set the domain name on the jupyter config. 
+When I edited the config.yaml again for the https portion helm upgraded successfully, but when accessing the 
+website I see an https error instead of the Jupyter login. I’m not sure if this is due to an issue in my config.yaml 
+or something I need to do to enable letsencrypt?
+
+ 
+
+Webpage error:
+
+An error occurred during a connection to aa.aa.aa.aa. Peer reports it experienced an internal error.
+
+Error code: SSL_ERROR_INTERNAL_ERROR_ALERT
+
+ 
+
+My config.yaml:
+
+ 
+
+proxy:
+
+  service:
+
+    annotations:
+
+      service.beta.kubernetes.io/azure-dns-label-name: xxxxxxxx-k8s-demo
+
+  https:
+
+    enabled: true
+
+    hosts:
+
+      - xxxxxxxx-k8s-demo.centralus.cloudapp.azure.com
+
+    letsencrypt:
+
+      contactEmail: xxxxxxxx@xx.xxx
+
+singleuser:
+
+  image:
+
+    # You should replace the "latest" tag with a fixed version from:
+
+    # https://hub.docker.com/r/jupyter/datascience-notebook/tags/
+
+    # Inspect the Dockerfile at:
+
+    # https://github.com/jupyter/docker-stacks/tree/HEAD/datascience-notebook/Dockerfile
+
+    name: jupyter/datascience-notebook
+
+    tag: latest
+```
+
+
+Our team replies:
+
+
+```
+The first thing you can do is run `kubectl top pod --namespace=jhub` to list all of the active pods (running docker containers) 
+in your cluster. This reveals:
+
+NAME                              CPU(cores)   MEMORY(bytes)  
+autohttps-aaaaaaaaa-gdkk9         1m           69Mi            
+continuous-image-puller-c6sxk     0m           0Mi            
+continuous-image-puller-hdftk     0m           0Mi            
+continuous-image-puller-qb8vm     0m           0Mi            
+hub-aaaaaaaaaa-p7kh9              3m           107Mi          
+jupyter-randomuser                1m           190Mi          
+proxy-aaaaaaaaaa-99w8z            1m           15Mi            
+user-scheduler-aaaaaaaaaa-fz6bp   2m           17Mi            
+user-scheduler-aaaaaaaaaa-jzz4d   2m           20Mi  
+
+I'm interested in that 'autohttps' pod, because it sounds like it has something to do with working out HTTPS. 
+To view logs from it, run this command:
+
+`kubectl --namespace=jhub logs pod/autohttps-aaaaaaaaaa-gdkk9`
+
+and this returns:
+
+Defaulted container "traefik" out of: traefik, secret-sync, load-acme (init)
+time="2022-05-31T20:11:57Z" level=info msg="Configuration loaded from file: /etc/traefik/traefik.yaml"
+time="2022-05-31T20:11:57Z" level=warning msg="No domain found in rule PathPrefix(`/`), the TLS options 
+applied for this router will depend on the hostSNI of each request" entryPointName=https routerName=default@file
+time="2022-05-31T20:11:59Z" level=warning msg="No domain found in rule PathPrefix(`/`), the TLS options 
+applied for this router will depend on the hostSNI of each request" routerName=default@file entryPointName=https
+time="2022-05-31T20:12:14Z" level=error msg="Unable to obtain ACME certificate for domains \"xxxxxxxx-k8s-demo.centralus.cloudapp.azure.com\" : 
+unable to generate a certificate for the domains [xxxxxxxx-k8s-demo.centralus.cloudapp.azure.com]: error: one or more domains had a 
+problem:\n[xxxxxxxx-k8s-demo.centralus.cloudapp.azure.com] acme: error: 400 :: urn:ietf:params:acme:error:dns :: 
+DNS problem: SERVFAIL looking up CAA for azure.com - the domain's nameservers may be malfunctioning\n" providerName=default.acme
+time="2022-05-31T20:21:57Z" level=warning msg="A new release has been found: 2.7.0. Please consider updating."
+
+
+Now we have meaningful server logs to debug!
+
+
+Judging by these logs, it sounds like the fatal issue was 'DNS problem: SERVFAIL looking up CAA for azure.com - the domain's nameservers may 
+be malfunctioning' . My guess is that not enough time had passed for the hub's DNS entries to settle down, and so certificate acquisition 
+failed. The first thing I would try is just re-running the 'helm upgrade', now that some time has passed.
+```
+
+
+Response from Learner:
+
+
+```
+I ran kubectl delete pod autohttps-aaaaaaaaa-gdkk9 then re-ran the helm upgrade to re-create the autohttps pod.
+
+ 
+
+The only other issue I ran into in setting up auth with github is that your sample config for openauth includes a tab instead of two spaces on the “Authenticator” (bolded below) line, which cause helm upgrade to throw a yaml error:
+
+ 
+
+hub:
+
+  config:
+
+    GitHubOAuthenticator:
+
+      client_id: <your-client-id>
+
+      client_secret: <your-client-secret>
+
+      oauth_callback_url: https://<your domain>/hub/oauth_callback
+
+    JupyterHub:
+
+      authenticator_class: github
+
+                Authenticator:
+
+      admin_users:
+
+        - <your github username>
+```
 
 
