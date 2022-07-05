@@ -1,5 +1,14 @@
 Let's build [Jupyter Hub infrastructure](https://zero-to-jupyterhub.readthedocs.io/en/latest/)
-on the Azure cloud.
+on the Azure cloud. For this you need 
+
+
+- an Azure subscription that is "clean" (not burdened by pre-existing restrictive policies)
+- familiarity with Jupyter notebooks and Jupyter hubs (and a good reason to build one!)
+- familiarity with issuing commands and editing text files in Linux (particularly creating and running scripts)
+- a few hours to spare
+    - First time this will be a bit slow to put together...
+    - ...and if you make a mistake you may have to scrap everything and start over...
+    - Once building a Jupyter Hub becomes second nature it goes pretty fast (half an hour)
 
 
 
