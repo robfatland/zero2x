@@ -21,7 +21,7 @@ singleuser:
 ```
 
 4. Create a script as below; and substitute *your* base string for `r5` in line 1. I call my script `go1.script` 
-and I run it with `source go1.script`. 
+and I run it with `source go1.script`. When it runs: It will prompt for some security strings. Just hit Enter. 
 
 
 ```
