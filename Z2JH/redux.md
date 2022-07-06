@@ -1,7 +1,7 @@
 1. Decide upon a **`BASE`** resource name; a short relevant string. I use `r5`. 
-2. Start the interactive shell--being careful to select the intended subscription--and in so doing create a Resource Group **`$BASE-rg`**
-    - It is best not to refresh your browser when the interactive shell is busy: Tend to lose the window and go into a "???" state
-3. In **`~`** create `config.yaml` that looks as follows: 
+2. Start the interactive shell ***being careful to select the intended subscription*** and in this process create a Resource Group **`$BASE-rg`**
+    - It is best not to refresh your browser when the interactive shell is busy: It tends to lose the window and go into a "???" state
+3. In **`~`** create `config.yaml` to look as follows: 
 
 ```
 singleuser:
@@ -52,7 +52,8 @@ SP_PASSWD=<paste value from above>
 ```
 
 
-6. Create and run the script below. You do this *in* the directory created above, `$BASE`. You should not have to change directories to do this.
+6. Create and run the script below. You do this *in* the directory created above, `$BASE`. 
+You should not have to change directories to do this. It should take 10 to 15 minutes or so.
 
 
 ```
