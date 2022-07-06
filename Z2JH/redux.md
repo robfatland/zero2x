@@ -3,6 +3,14 @@
     - ***being careful to select the intended subscription*** and in this process...
     - Use **See advanced settings** to create a Resource Group **`$BASE-rg`** in addition to a couple other items
     - It is best not to refresh your browser when the interactive shell is busy: It tends to lose the window and go into a "???" state
+
+
+> Tip: There are several icons on the toolbar above the `bash` window for the interactive shell. 
+> If for some reason you need to start over: Click the icon that looks like a power button. This will scrap and re-start
+> the interactive shell. 
+
+
+
 3. In **`~`** create `config.yaml` to look as follows: 
 
 ```
