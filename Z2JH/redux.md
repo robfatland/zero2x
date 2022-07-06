@@ -1,5 +1,7 @@
 1. Decide upon a **`BASE`** resource name; a short relevant string. I use `r5`. 
-2. Start the interactive shell ***being careful to select the intended subscription*** and in this process create a Resource Group **`$BASE-rg`**
+2. Start the interactive shell 
+    - ***being careful to select the intended subscription*** and in this process...
+    - Use **See advanced settings** to create a Resource Group **`$BASE-rg`** in addition to a couple other items
     - It is best not to refresh your browser when the interactive shell is busy: It tends to lose the window and go into a "???" state
 3. In **`~`** create `config.yaml` to look as follows: 
 
