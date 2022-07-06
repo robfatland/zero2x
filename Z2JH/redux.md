@@ -1,5 +1,6 @@
 1. Decide upon a **`BASE`** resource name; a short relevant string. I use `r5`. 
-2. Start the interactive shell--being careful to select the intended subscription--and in so doing create an RG called **`$BASE-rg`**
+2. Start the interactive shell--being careful to select the intended subscription--and in so doing create a Resource Group **`$BASE-rg`**
+    - It is best not to refresh your browser when the interactive shell is busy: Tend to lose the window and go into a "???" state
 3. In **`~`** create `config.yaml` that looks as follows: 
 
 ```
@@ -9,7 +10,8 @@ singleuser:
     tag: latest
 ```
 
-4. Create a script as follows, taking care to substitute *your* base string for `r5` in line 1... oh, and then run it.
+4. Create a script as below; and substitute *your* base string for `r5` in line 1. I call my script `go1.script` 
+and I run it with `source go1.script`. 
 
 
 ```
@@ -40,7 +42,8 @@ az ad sp create-for-rbac \
    --scopes $VNET_ID
 ```
 
-5. From the last four lines of output text: Copy and past to set two variables:
+
+5. From the the output text: Identify the ID and Password; and copy their values into these two variables:
 
 
 ```
@@ -49,7 +52,7 @@ SP_PASSWD=<paste value from above>
 ```
 
 
-6. Create and run the script below. You do this *in* the directory created above, $BASE. You should not have to change directories to do this.
+6. Create and run the script below. You do this *in* the directory created above, `$BASE`. You should not have to change directories to do this.
 
 
 ```
@@ -105,11 +108,11 @@ kubectl get service --namespace $K8S_NAMESPACE
 
 
 
-> **Heads Up***: In the portal navigate to the auto-generated RG; with a name like **`MC_r5-rg_r5_westus`**.
-> This is called the **node** resource group.
-> This contains two public ip addresses in its resource list. The one that looks like **`kubernetes-a47382...etcetera...`**
+> **Heads Up***: The script above auto-generates a new Resource Group. It has a name like **`MC_r5-rg_r5_westus`**.
+> This is the **node** resource group.
+> It contains two public ip addresses in its resource list. The one that looks like **`kubernetes-a47382...etcetera...`**
 > is the one associated with the Jupyter Hub service. Open this resource and the ip address shown should match that provided in 
-> step 8 above. Note that this public ip address has a **name** which is just that**`kubernetes-a47382...etcetera...`**
+> step 8 above. Note that this public ip address has a **name** which is just that **`kubernetes-a47382...etcetera...`**
 > string. Both this name and the name of the auto-generated resource group are used in the next step.
 
 
